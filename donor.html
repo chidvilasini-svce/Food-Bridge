@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FoodBridge | Donor Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#173f35;--forest2:#225848;--leaf:#7eaa68;--lime:#d8ef83;
+  --cream:#f7f5eb;--paper:#fff;--ink:#20352d;--muted:#78867e;--line:#e5e9df;
+  --orange:#e8a44d;--red:#c75e4c;--blue:#6b91b7;--shadow:0 14px 40px rgba(28,57,43,.07)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:252px minmax(0,1fr)}
+.sidebar{background:var(--forest);color:#f7f8ef;padding:26px 17px 20px;display:flex;flex-direction:column;min-height:100vh;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:0 10px 28px;text-decoration:none}
+.brand-mark{height:40px;width:40px;flex:0 0 40px;background:var(--forest2);border:1px solid rgba(255,255,255,0.1);border-radius:12px;display:grid;place-items:center}
+.brand-mark svg{width:24px;height:24px;display:block}
+.brand-name{font-family:Fraunces,serif;font-size:26px;line-height:1;font-weight:800;letter-spacing:-.8px;color:#fff}
+.brand-name b{color:var(--lime)}
+.brand-tag{color:#b8cbb9;font-size:10px;letter-spacing:1.6px;margin-top:5px;display:block}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:1.6px;color:#91afa0;padding:8px 12px 10px}
+.nav{display:grid;gap:5px}
+.nav-btn{width:100%;display:flex;align-items:center;gap:12px;border:0;background:transparent;color:#d3e0d6;text-align:left;padding:12px;border-radius:12px;transition:.2s;font-size:13px}
+.nav-btn .ico{width:22px;text-align:center;font-size:17px}
+.nav-btn:hover{background:rgba(255,255,255,0.08);color:white}
+.nav-btn.active{background:var(--lime);color:var(--forest);font-weight:700}
+.nav-count{margin-left:auto;font-size:10px;border-radius:20px;padding:3px 7px;background:rgba(255,255,255,0.12)}
+.nav-btn.active .nav-count{background:var(--forest);color:var(--lime)}
+.sidebar-bottom{margin-top:auto}
+.help-card{background:rgba(0,0,0,0.15);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:15px;margin:22px 5px 17px}
+.help-icon{font-size:23px}
+.help-card strong{display:block;margin:8px 0 5px;font-size:12px}
+.help-card p{font-size:11px;line-height:1.6;color:#b6c9bc;margin:0 0 12px}
+.help-card button{border:1px solid #769687;background:transparent;color:#f5f8ef;border-radius:9px;padding:8px 10px;font-size:11px}
+.side-user{border-top:1px solid rgba(255,255,255,0.08);padding:17px 6px 0;display:flex;align-items:center;gap:10px}
+.avatar{width:37px;height:37px;border-radius:50%;display:grid;place-items:center;background:#e5f0cf;color:var(--forest);font-weight:700;flex-shrink:0}
+.side-user strong{display:block;font-size:12px}
+.side-user small{display:block;color:#b6c9bc;margin-top:3px;font-size:10px}
+.main{min-width:0}
+.topbar{height:82px;padding:0 34px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(249,248,241,0.85);gap:20px}
+.crumb{font-size:12px;color:var(--muted)}
+.crumb strong{color:var(--forest);font-weight:700}
+.top-actions{display:flex;align-items:center;gap:12px}
+.searchbox{background:white;border:1px solid var(--line);border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:8px;width:230px}
+.searchbox input{border:0;outline:0;width:100%;min-width:0;background:transparent;font-size:12px}
+.icon-btn{height:39px;width:39px;display:grid;place-items:center;border:1px solid var(--line);background:white;border-radius:12px;position:relative;color:var(--forest);font-size:17px}
+.dot{position:absolute;right:7px;top:7px;width:7px;height:7px;background:#e26b55;border-radius:50%;border:1px solid white}
+.mobile-menu{display:none}
+.content{padding:30px 34px 42px;max-width:1600px;margin:auto}
+.view{display:none}
+.view.active{display:block;animation:fade .22s ease}
+@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none}}
+.page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:24px}
+.eyebrow{color:#68876e;font-size:10px;text-transform:uppercase;letter-spacing:1.8px;font-weight:700;margin-bottom:9px}
+.page-heading h1{font-family:Fraunces,serif;font-size:clamp(27px,3vw,36px);letter-spacing:-.8px;line-height:1.12;margin:0;color:var(--forest)}
+.page-heading p{color:var(--muted);margin:9px 0 0;line-height:1.6;font-size:13px}
+.date-pill{white-space:nowrap;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,0.6);padding:10px 13px;font-size:11px;color:#5f7166}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:11px;padding:12px 16px;font-size:12px;font-weight:700;transition:.18s}
+.btn-primary{background:var(--forest);color:white}
+.btn-primary:hover{background:var(--forest2);transform:translateY(-1px)}
+.btn-lime{background:var(--lime);color:var(--forest)}
+.btn-light{background:white;border:1px solid var(--line);color:var(--forest)}
+.btn-danger{background:rgba(199,94,76,0.1);color:#a84535}
+.btn-small{padding:8px 10px;font-size:11px;border-radius:9px}
+.hero{background:var(--forest);border-radius:22px;color:white;padding:26px 29px;display:grid;grid-template-columns:1.3fr .7fr;align-items:center;gap:20px;position:relative;overflow:hidden;margin-bottom:23px;min-height:180px}
+.hero:after{content:'✳';position:absolute;font-size:230px;color:rgba(255,255,255,0.03);right:12%;top:-95px;line-height:1}
+.hero .eyebrow{color:var(--lime)}
+.hero h2{font-family:Fraunces,serif;font-size:29px;line-height:1.2;margin:0 0 10px;max-width:490px}
+.hero p{color:#c4d5c7;font-size:12px;line-height:1.7;max-width:480px;margin:0 0 18px}
+.hero-actions{display:flex;gap:9px;flex-wrap:wrap}
+.hero-stat{z-index:1;justify-self:center;text-align:center;background:rgba(0,0,0,0.15);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:23px 28px;min-width:175px}
+.hero-stat .big{font-family:Fraunces,serif;font-size:44px;color:var(--lime);line-height:1}
+.hero-stat span{display:block;font-size:11px;color:#d3e1d3;margin-top:9px}
+.hero-stat small{display:block;font-size:10px;color:#a8c3ae;margin-top:7px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:24px}
+.stat-card{padding:18px 18px 16px;background:var(--paper);border:1px solid var(--line);border-radius:17px;box-shadow:0 4px 14px rgba(25,60,42,0.04);min-width:0}
+.stat-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.stat-icon{height:37px;width:37px;border-radius:12px;display:grid;place-items:center;background:#eaf2df;font-size:17px}
+.stat-trend{font-size:10px;color:#4e8659;background:#edf6e9;border-radius:20px;padding:5px 7px}
+.stat-number{font-family:Fraunces,serif;font-size:31px;color:var(--forest);margin:16px 0 4px;line-height:1}
+.stat-label{font-size:11px;color:var(--muted)}
+.stat-note{font-size:10px;color:#9aa59b;margin-top:10px}
+.two-col{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:20px;margin-bottom:22px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:21px;min-width:0}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+.panel-head h3{font-family:Fraunces,serif;color:var(--forest);font-size:19px;margin:0}
+.panel-head p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.text-link{border:0;background:transparent;color:#4d7b52;font-size:11px;font-weight:700;padding:5px}
+.donation-list{display:grid;gap:0}
+.donation-row{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 0;border-top:1px solid #edf0e9}
+.food-thumb{width:47px;height:47px;background:#edf2e3;border-radius:13px;display:grid;place-items:center;font-size:24px}
+.donation-info{min-width:0}
+.donation-info strong{display:block;font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.donation-info small{display:block;font-size:10px;color:var(--muted);margin-top:5px;line-height:1.4}
+.row-right{text-align:right}
+.row-right strong{display:block;font-size:12px}
+.row-right small{display:block;margin-top:6px}
+.status{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:6px 8px;font-size:9px;font-weight:700;white-space:nowrap}
+.status:before{content:'';height:5px;width:5px;border-radius:50%;background:currentColor}
+.status.awaiting{background:rgba(235,195,85,0.15);color:#a76c18}
+.status.claimed{background:rgba(60,111,159,0.12);color:#3c6f9f}
+.status.collected{background:rgba(71,125,69,0.12);color:#477d45}
+.status.expired{background:rgba(173,75,61,0.12);color:#ad4b3d}
+.impact-card{background:#eef4e5;border-radius:15px;padding:17px;margin-bottom:12px}
+.impact-card:last-child{margin-bottom:0}
+.impact-card .impact-icon{font-size:20px}
+.impact-card strong{display:block;font-family:Fraunces,serif;color:var(--forest);font-size:25px;margin:8px 0 4px}
+.impact-card span{font-size:11px;color:#687e69}
+.progress-wrap{margin-top:16px}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:#6e7f70;margin-bottom:8px}
+.progress{height:7px;background:#dce5d5;border-radius:20px;overflow:hidden}
+.progress span{height:100%;display:block;background:var(--leaf);border-radius:20px}
+.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.quick-action{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:16px;text-align:left;color:var(--forest);transition:.2s}
+.quick-action:hover{border-color:#b6cba8;transform:translateY(-2px)}
+.quick-action .qa-icon{font-size:22px}
+.quick-action strong{display:block;font-size:12px;margin:12px 0 5px}
+.quick-action span{display:block;color:var(--muted);font-size:10px;line-height:1.5}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:11px;font-weight:700;color:#415b4c}
+.field input,.field select,.field textarea{width:100%;border:1px solid #dfe6da;background:#fefb;border-radius:10px;padding:12px;outline:none;color:var(--ink);font-size:12px;min-width:0}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#83a875;box-shadow:0 0 0 3px rgba(131,168,117,0.12)}
+.field textarea{min-height:85px;resize:vertical}
+.field .hint{font-size:10px;color:#87948a;line-height:1.5}
+.section-divider{border:0;border-top:1px solid var(--line);margin:22px 0}
+.form-section-title{font-family:Fraunces,serif;font-size:18px;color:var(--forest);margin:0 0 15px}
+.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:17px}
+.toolbar input,.toolbar select{border:1px solid var(--line);background:white;border-radius:10px;padding:11px 12px;font-size:11px;color:var(--ink);outline:none}
+.toolbar input{flex:1;min-width:190px}
+.table-wrap{overflow-x:auto}
+.data-table{border-collapse:collapse;width:100%;min-width:650px}
+.data-table th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#859187;background:#f7f8f1;padding:13px 12px;font-weight:700}
+.data-table td{padding:14px 12px;border-bottom:1px solid #edf0e9;font-size:11px;vertical-align:middle}
+.data-table tr:last-child td{border-bottom:0}
+.food-cell{display:flex;align-items:center;gap:9px;min-width:150px}
+.food-cell .food-thumb{width:37px;height:37px;font-size:20px}
+.food-cell strong{display:block;font-size:11px}
+.food-cell small{display:block;color:var(--muted);margin-top:4px;font-size:9px}
+.table-actions{display:flex;gap:6px}
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty-state .empty-icon{font-size:34px;margin-bottom:10px}
+.empty-state strong{display:block;color:var(--forest);font-family:Fraunces,serif;font-size:20px;margin-bottom:6px}
+.empty-state p{font-size:11px;line-height:1.6}
+.pickup-card{display:grid;grid-template-columns:1fr auto;gap:14px;border:1px solid var(--line);border-radius:15px;padding:17px;margin-bottom:12px;background:#fefb}
+.pickup-main{display:flex;gap:12px;min-width:0}
+.pickup-icon{width:43px;height:43px;border-radius:13px;background:#eaf2df;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.pickup-main h4{margin:2px 0 7px;font-size:13px}
+.pickup-main p{font-size:10px;color:var(--muted);line-height:1.6;margin:0}
+.pickup-meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:10px;color:#607566}
+.pickup-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.history-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:18px}
+.history-box{padding:18px;background:#eef4e5;border-radius:15px}
+.history-box span{font-size:10px;color:#6d806d}
+.history-box strong{display:block;font-family:Fraunces,serif;font-size:28px;color:var(--forest);margin-top:8px}
+.impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.impact-tile{border-radius:17px;padding:19px;background:var(--forest);color:white;min-height:150px}
+.impact-tile:nth-child(2){background:#dcebbf;color:var(--forest)}
+.impact-tile:nth-child(3){background:#eaf1e2;color:var(--forest)}
+.impact-tile .tile-icon{font-size:23px}
+.impact-tile strong{display:block;font-family:Fraunces,serif;font-size:29px;margin:15px 0 5px}
+.impact-tile span{font-size:10px;opacity:.8}
+.notification-list{display:grid;gap:10px}
+.notification{display:flex;gap:13px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fefb}
+.notification.unread{border-left:4px solid var(--leaf);background:#fcfdf7}
+.notification .n-icon{width:39px;height:39px;border-radius:12px;background:#eaf2df;display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.notification-content{flex:1;min-width:0}
+.notification-content strong{display:block;font-size:12px;margin:2px 0 5px}
+.notification-content p{margin:0;font-size:11px;color:var(--muted);line-height:1.6}
+.notification-content small{display:block;font-size:9px;color:#9ba69c;margin-top:8px}
+.notification button{align-self:flex-start;border:0;background:transparent;color:#72906f;font-size:10px}
+.profile-layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:20px}
+.profile-card{text-align:center}
+.profile-avatar{height:82px;width:82px;border-radius:50%;display:grid;place-items:center;background:var(--lime);color:var(--forest);font-size:28px;font-weight:700;margin:0 auto 13px}
+.profile-card h3{font-family:Fraunces,serif;font-size:22px;color:var(--forest);margin:0 0 6px}
+.profile-card p{font-size:11px;color:var(--muted);margin:0 0 15px}
+.profile-badge{display:inline-flex;border-radius:20px;background:#edf5e4;color:#537d4b;padding:7px 10px;font-size:10px;font-weight:700}
+.profile-stat-row{display:flex;justify-content:space-around;border-top:1px solid var(--line);padding-top:17px;margin-top:18px}
+.profile-stat-row strong{display:block;color:var(--forest);font-size:16px}
+.profile-stat-row span{display:block;color:var(--muted);font-size:9px;margin-top:4px}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid #edf0e9}
+.settings-row:last-child{border-bottom:0}
+.settings-row strong{display:block;font-size:12px}
+.settings-row small{display:block;color:var(--muted);font-size:10px;margin-top:5px;line-height:1.5}
+.switch{position:relative;width:41px;height:23px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;border-radius:20px;background:#cdd6ca;transition:.2s;cursor:pointer}
+.slider:before{content:'';position:absolute;height:17px;width:17px;left:3px;top:3px;border-radius:50%;background:white;transition:.2s}
+.switch input:checked+.slider{background:var(--forest2)}
+.switch input:checked+.slider:before{transform:translateX(18px)}
+.toast{position:fixed;right:24px;bottom:24px;z-index:100;background:var(--forest);color:white;padding:14px 18px;border-radius:12px;box-shadow:var(--shadow);font-size:12px;max-width:calc(100vw - 48px);opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s}
+.toast.show{opacity:1;transform:translateY(0)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(16,37,29,0.8);z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.show{display:flex}
+.modal{width:min(480px,100%);background:var(--paper);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.modal h3{font-family:Fraunces,serif;color:var(--forest);font-size:23px;margin:0 0 8px}
+.modal p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 18px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.footer-note{font-size:10px;color:#8a978b;text-align:center;padding:20px 0 0}
+@media(max-width:1100px){.app{grid-template-columns:220px minmax(0,1fr)}.content{padding:25px 22px}.topbar{padding:0 22px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr auto}.hero-stat{min-width:145px;padding:20px}.hero-stat .big{font-size:36px}}
+@media(max-width:780px){.app{display:block}.sidebar{position:fixed;z-index:60;left:-270px;top:0;width:252px;height:100vh;transition:left .25s;box-shadow:var(--shadow)}.sidebar.open{left:0}.mobile-menu{display:grid}.topbar{height:70px;padding:0 15px}.content{padding:22px 15px 32px}.searchbox{width:min(35vw,200px)}.crumb{display:none}.hero{grid-template-columns:1fr;padding:22px}.hero-stat{justify-self:start;display:flex;align-items:center;gap:14px;text-align:left;padding:13px 17px;min-width:0}.hero-stat .big{font-size:30px}.hero-stat span{margin:0}.hero-stat small{display:none}.two-col{grid-template-columns:1fr}.quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))}.quick-action{padding:12px}.profile-layout{grid-template-columns:1fr}.profile-card{max-width:none}.page-heading{align-items:flex-start}.date-pill{display:none}}
+@media(max-width:520px){.stats{gap:9px}.stat-card{padding:13px}.stat-number{font-size:27px;margin-top:13px}.stat-label{font-size:10px}.stat-note{font-size:9px}.stat-icon{width:31px;height:31px}.stat-trend{font-size:8px}.hero h2{font-size:25px}.hero p{font-size:11px}.page-heading h1{font-size:29px}.quick-actions{grid-template-columns:1fr}.quick-action{display:grid;grid-template-columns:35px 1fr;column-gap:10px;align-items:center}.quick-action .qa-icon{grid-row:span 2}.quick-action strong{margin:0 0 4px}.quick-action span{grid-column:2}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:16px}.history-summary,.impact-grid{grid-template-columns:1fr}.pickup-card{grid-template-columns:1fr}.pickup-actions{justify-content:flex-start}.searchbox{display:none}.top-actions{gap:7px}.form-actions{flex-direction:column-reverse}.form-actions .btn{width:100%}}
+/* ===== Professional Animations ===== */
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(226,107,85,0.5)}70%{box-shadow:0 0 0 7px rgba(226,107,85,0)}100%{box-shadow:0 0 0 0 rgba(226,107,85,0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes ripple{from{transform:scale(0);opacity:.28}to{transform:scale(1);opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes out{to{opacity:0;transform:translateX(24px)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.view.fx .page-heading,.view.fx .hero,.view.fx .stat-card,.view.fx .panel,.view.fx .quick-action,.view.fx .impact-tile,.view.fx .history-box,.view.fx .pickup-card,.view.fx .notification,.view.fx .donation-row{animation:rise .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0)*70ms)}
+.sidebar .nav-btn{animation:slideIn .5s cubic-bezier(.2,.7,.2,1) both}
+.sidebar .nav-btn:nth-child(2){animation-delay:.05s}.sidebar .nav-btn:nth-child(3){animation-delay:.1s}.sidebar .nav-btn:nth-child(4){animation-delay:.15s}.sidebar .nav-btn:nth-child(5){animation-delay:.2s}.sidebar .nav-btn:nth-child(6){animation-delay:.25s}
+.nav-btn:hover{transform:translateX(3px)}.nav-btn.active:hover{transform:none}
+.btn,.nav-btn,.quick-action,.icon-btn,.text-link,.stat-card,.panel,.pickup-card,.notification,.donation-row{transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s}
+.btn{position:relative;overflow:hidden}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(23,63,53,0.16)}
+.btn:active{transform:translateY(0) scale(.97)}
+.ripple{position:absolute;border-radius:50%;background:currentColor;pointer-events:none;animation:ripple .6s ease-out forwards}
+.btn.loading{pointer-events:none;opacity:.85}
+.btn.loading:before{content:'';width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+.stat-card:hover,.pickup-card:hover,.notification:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.icon-btn:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(23,63,53,0.09)}
+.icon-btn:active{transform:scale(.94)}
+.dot{animation:pulse 2s infinite}
+.hero:after{animation:spin 80s linear infinite}
+.hero-stat{animation:floaty 5s ease-in-out infinite}
+.status.awaiting:before{animation:blink 1.6s infinite}
+.progress span{transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+.data-table tbody tr{transition:background .2s}
+.data-table tbody tr:hover{background:#f8faf2}
+.donation-row:hover{background:#f8faf2}
+.help-card button:hover{background:rgba(255,255,255,0.1)}
+.removing{animation:out .3s ease forwards}
+.modal-backdrop.show{animation:fadeIn .2s ease}
+.modal-backdrop.show .modal{animation:pop .3s cubic-bezier(.2,.9,.3,1.2)}
+.field input,.field select,.field textarea,.searchbox{transition:border-color .2s,box-shadow .2s}
+.searchbox:focus-within{border-color:#83a875;box-shadow:0 0 0 3px rgba(131,168,117,0.12)}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#overview" aria-label="FoodBridge dashboard home">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M2 17c3-9 17-9 20 0" stroke="#c9e86b" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M6 17v-3M12 17V9M18 17v-3" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span>
+        <span class="brand-name">Food<b>Bridge</b></span>
+        <span class="brand-tag">GOOD FOOD. GOOD PURPOSE.</span>
+      </span>
+    </a>
+    <div class="nav-label">Workspace</div>
+    <nav class="nav" aria-label="Main navigation">
+      <button class="nav-btn active" data-view="overview"><span class="ico">⌂</span>Dashboard overview</button>
+      <button class="nav-btn" data-view="add"><span class="ico">＋</span>Add surplus food</button>
+      <button class="nav-btn" data-view="donations"><span class="ico">▤</span>My donations <span class="nav-count" id="navDonationCount">0</span></button>
+      <button class="nav-btn" data-view="pickup"><span class="ico">↗</span>Pickup requests <span class="nav-count" id="navPickupCount">0</span></button>
+      <button class="nav-btn" data-view="history"><span class="ico">↺</span>Donation history</button>
+      <button class="nav-btn" data-view="impact"><span class="ico">✿</span>Impact report</button>
+    </nav>
+    <div class="nav-label" style="margin-top:12px">Account</div>
+    <nav class="nav" aria-label="Account navigation">
+      <button class="nav-btn" data-view="notifications"><span class="ico">🔔</span>Notifications <span class="nav-count" id="navNotifCount">0</span></button>
+      <button class="nav-btn" data-view="profile"><span class="ico">☺</span>Profile &amp; settings</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="help-card"><div class="help-icon">💬</div><strong>Need help?</strong><p>Learn how to list food, track pickups and measure your impact.</p><button id="helpBtn">Open quick guide</button></div>
+      <div class="side-user"><div class="avatar" id="sideAvatar">FB</div><div><strong id="sideName">Donor</strong><small id="sideOrg">Organisation</small></div></div>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="icon-btn mobile-menu" id="menuBtn" aria-label="Open menu">☰</button>
+        <div class="crumb">Workspace / <strong id="crumbCur">Dashboard overview</strong></div>
+      </div>
+      <div class="top-actions">
+        <div class="searchbox"><span>🔍</span><input id="topSearch" type="search" placeholder="Search donations…" aria-label="Search donations"></div>
+        <button class="icon-btn" id="bellBtn" aria-label="Notifications">🔔<span class="dot" id="bellDot"></span></button>
+        <div class="avatar" id="topAvatar">FB</div>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="view-overview">
+        <div class="page-heading"><div><div class="eyebrow">Donor dashboard</div><h1 id="greet">Good day</h1><p>Here's how your surplus food is making a difference.</p></div><div class="date-pill" id="datePill"></div></div>
+        <div id="ovBody"></div>
+      </section>
+      <section class="view" id="view-add">
+        <div class="page-heading"><div><div class="eyebrow">New listing</div><h1 id="addTitle">Add surplus food</h1><p id="addSub">Tell partner NGOs what you have available and when it expires.</p></div></div>
+        <form class="panel" id="addForm" autocomplete="off">
+          <h3 class="form-section-title">Food details</h3>
+          <div class="form-grid">
+            <div class="field full"><label for="f-food">Food item *</label><input id="f-food" required maxlength="60" placeholder="e.g. Fresh vegetable crates"></div>
+            <div class="field"><label for="f-cat">Category</label><select id="f-cat"></select></div>
+            <div class="field"><label for="f-qty">Quantity (kg) *</label><input id="f-qty" type="number" min="0.5" step="0.5" required placeholder="10"></div>
+            <div class="field"><label for="f-exp">Best before *</label><input id="f-exp" type="datetime-local" required><span class="hint">Must be a future date and time.</span></div>
+            <div class="field"><label for="f-addr">Pickup address *</label><input id="f-addr" required maxlength="120" placeholder="Street, area, city"></div>
+            <div class="field full"><label for="f-notes">Notes for the collector</label><textarea id="f-notes" maxlength="300" placeholder="Storage needs, entrance, contact person…"></textarea></div>
+          </div>
+          <div class="form-actions"><button type="button" class="btn btn-light" id="addReset">Clear form</button><button type="submit" class="btn btn-primary" id="addSubmit">Publish donation</button></div>
+        </form>
+      </section>
+      <section class="view" id="view-donations">
+        <div class="page-heading"><div><div class="eyebrow">Manage</div><h1>My donations</h1><p>Edit, track and manage every listing you've shared.</p></div><button class="btn btn-primary" data-go="add">＋ New donation</button></div>
+        <div class="panel">
+          <div class="toolbar"><input id="donSearch" type="search" placeholder="Search by food or category…"><select id="donStatus"><option value="all">All statuses</option><option value="awaiting">Awaiting pickup</option><option value="claimed">Claimed</option><option value="collected">Collected</option><option value="expired">Expired</option></select></div>
+          <div id="donTable"></div>
+        </div>
+      </section>
+      <section class="view" id="view-pickup">
+        <div class="page-heading"><div><div class="eyebrow">Logistics</div><h1>Pickup requests</h1><p>Confirm collections as partner NGOs arrive.</p></div></div>
+        <div class="panel"><div id="pickupList"></div></div>
+      </section>
+      <section class="view" id="view-history">
+        <div class="page-heading"><div><div class="eyebrow">Records</div><h1>Donation history</h1><p>A log of completed and expired donations.</p></div></div>
+        <div id="histBody"></div>
+      </section>
+      <section class="view" id="view-impact">
+        <div class="page-heading"><div><div class="eyebrow">Impact</div><h1>Your impact report</h1><p>Estimates based on collected donations (≈2.5 meals and 2.5 kg CO₂e per kg).</p></div></div>
+        <div id="impactBody"></div>
+      </section>
+      <section class="view" id="view-notifications">
+        <div class="page-heading"><div><div class="eyebrow">Inbox</div><h1>Notifications</h1><p>Updates on claims, pickups and expiries.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-light btn-small" data-act="readall">Mark all read</button><button class="btn btn-danger btn-small" data-act="clearall">Clear all</button></div></div>
+        <div class="panel"><div id="notifList"></div></div>
+      </section>
+      <section class="view" id="view-profile">
+        <div class="page-heading"><div><div class="eyebrow">Account</div><h1>Profile &amp; settings</h1><p>Keep your organisation details and preferences up to date.</p></div></div>
+        <div class="profile-layout">
+          <div class="panel profile-card" id="profileCard"></div>
+          <div class="panel">
+            <h3 class="form-section-title">Organisation details</h3>
+            <form id="profileForm" autocomplete="off">
+              <div class="form-grid">
+                <div class="field"><label for="p-name">Contact name *</label><input id="p-name" required maxlength="50"></div>
+                <div class="field"><label for="p-org">Organisation *</label><input id="p-org" required maxlength="60"></div>
+                <div class="field"><label for="p-type">Donor type</label><select id="p-type"><option>Restaurant</option><option>Grocery store</option><option>Bakery</option><option>Hotel / Catering</option><option>Individual</option></select></div>
+                <div class="field"><label for="p-phone">Phone</label><input id="p-phone" type="tel" maxlength="20"></div>
+                <div class="field"><label for="p-email">Email *</label><input id="p-email" type="email" required></div>
+                <div class="field"><label for="p-addr">Default pickup address</label><input id="p-addr" maxlength="120"></div>
+              </div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary">Save changes</button></div>
+            </form>
+            <hr class="section-divider">
+            <h3 class="form-section-title">Preferences</h3>
+            <div class="settings-row"><div><strong>Claim alerts</strong><small>Get notified when an NGO claims your donation.</small></div><label class="switch"><input type="checkbox" id="set-claim"><span class="slider"></span></label></div>
+            <div class="settings-row"><div><strong>Expiry reminders</strong><small>Be alerted when a listing expires unclaimed.</small></div><label class="switch"><input type="checkbox" id="set-expiry"><span class="slider"></span></label></div>
+            <div class="settings-row"><div><strong>Weekly impact summary</strong><small>Receive a weekly digest of your impact.</small></div><label class="switch"><input type="checkbox" id="set-weekly"><span class="slider"></span></label></div>
+            <div class="settings-row"><div><strong>Reset demo data</strong><small>Restore the sample donations and notifications.</small></div><button class="btn btn-danger btn-small" id="resetData" type="button">Reset</button></div>
+          </div>
+        </div>
+      </section>
+      <div class="footer-note">© FoodBridge · Reducing waste, feeding communities.</div>
+    </main>
+  </div>
+</div>
+<div class="modal-backdrop" id="modalBack"><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+const KEY = 'foodbridge_state_v1', H = 36e5;
+const CATS = {'Fruits & Vegetables':'🥬','Bakery':'🍞','Cooked meals':'🍲','Dairy':'🥛','Packaged food':'🥫','Beverages':'🧃'};
+const STATUS = {awaiting:'Awaiting pickup',claimed:'Claimed',collected:'Collected',expired:'Expired'};
+const NGOS = ['Hope Kitchen','City Food Bank','Sunrise Shelter','Care Together'];
+const TITLES = {overview:'Dashboard overview',add:'Add surplus food',donations:'My donations',pickup:'Pickup requests',history:'Donation history',impact:'Impact report',notifications:'Notifications',profile:'Profile & settings'};
+let state, current = 'overview', editId = null, filter = {q:'', st:'all'}, toastT, modalOk = null, fxT;
+const fmt = t => new Date(t).toLocaleString([],{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});
+const ago = t => {
+  const m = Math.max(1, Math.round((Date.now() - t) / 6e4));
+  if (m < 60) return m + ' min ago';
+  const h = Math.round(m / 60);
+  return h < 24 ? h + ' hr ago' : Math.round(h / 24) + ' d ago';
+};
+const toLocalInput = t => {
+  const d = new Date(t - new Date().getTimezoneOffset() * 6e4);
+  return d.toISOString().slice(0,16);
+};
+const meals = kg => Math.round(kg * 2.5);
+const badge = s => '<span class="status ' + s + '">' + STATUS[s] + '</span>';
+const empty = (i, t, p) => '<div class="empty-state"><div class="empty-icon">' + i + '</div><strong>' + t + '</strong><p>' + p + '</p></div>';
+const initials = n => String(n).split(/\s+/).filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join('') || 'FB';
+const nd = id => state.donations.find(d => d.id === id);
+const emoji = c => CATS[c] || '🍽';
+
+function seed(){
+  const n = Date.now();
+  return {
+    nextId: 20,
+    donations: [
+      {id:1, food:'Fresh vegetable crates', category:'Fruits & Vegetables', qty:24, expiry:n + 30*H, address:'12 Market Street, Downtown', notes:'Back entrance, ring bell', status:'awaiting', ngo:'', created:n - 2*H},
+      {id:2, food:'Sourdough loaves', category:'Bakery', qty:12, expiry:n + 10*H, address:'12 Market Street, Downtown', notes:'', status:'claimed', ngo:'Hope Kitchen', created:n - 5*H},
+      {id:3, food:'Veg biryani trays', category:'Cooked meals', qty:18, expiry:n + 6*H, address:'12 Market Street, Downtown', notes:'Keep warm', status:'claimed', ngo:'City Food Bank', created:n - 7*H},
+      {id:4, food:'Packaged lentils', category:'Packaged food', qty:40, expiry:n + 90*H, address:'12 Market Street, Downtown', notes:'', status:'collected', ngo:'Sunrise Shelter', created:n - 30*H},
+      {id:5, food:'Milk cartons', category:'Dairy', qty:30, expiry:n - 5*H, address:'12 Market Street, Downtown', notes:'', status:'expired', ngo:'', created:n - 50*H},
+      {id:6, food:'Seasonal fruit baskets', category:'Fruits & Vegetables', qty:16, expiry:n + 20*H, address:'12 Market Street, Downtown', notes:'', status:'collected', ngo:'Care Together', created:n - 72*H}
+    ],
+    notifs: [
+      {id:11, icon:'🤝', title:'Hope Kitchen claimed your donation', text:'Sourdough loaves (12 kg) are ready for pickup.', time:n - 1*H, read:false},
+      {id:12, icon:'🤝', title:'City Food Bank claimed your donation', text:'Veg biryani trays (18 kg) are ready for pickup.', time:n - 3*H, read:false},
+      {id:13, icon:'✅', title:'Pickup completed', text:'Packaged lentils (40 kg) were collected by Sunrise Shelter.', time:n - 26*H, read:true},
+      {id:14, icon:'⏰', title:'Donation expired', text:'Milk cartons (30 kg) expired before pickup.', time:n - 48*H, read:true}
+    ],
+    profile: {name:'Aarav Mehta', org:'Green Leaf Bistro', type:'Restaurant', email:'aarav@greenleafbistro.com', phone:'+91 98765 43210', address:'12 Market Street, Downtown'},
+    settings: {claim:true, expiry:true, weekly:false}
+  };
+}
+
+function load(){
+  try {
+    const r = localStorage.getItem(KEY);
+    if (r) {
+      const s = JSON.parse(r);
+      if (s && s.donations && s.notifs && s.profile && s.settings) return s;
+    }
+  } catch(e){}
+  return seed();
+}
+
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+}
+
+function notify(icon, title, text){
+  state.notifs.unshift({id: state.nextId++, icon: icon, title: title, text: text, time: Date.now(), read: false});
+}
+
+function stats(){
+  const d = state.donations, co = d.filter(x => x.status === 'collected'), ex = d.filter(x => x.status === 'expired').length, kg = co.reduce((a, x) => a + x.qty, 0);
+  return {total: d.length, aw: d.filter(x => x.status === 'awaiting').length, cl: d.filter(x => x.status === 'claimed').length, co: co.length, ex: ex, kg: kg, meals: meals(kg), rate: co.length + ex ? Math.round(co.length / (co.length + ex) * 100) : 100};
+}
+
+function sweep(){
+  let ch = false;
+  state.donations.forEach(d => {
+    if (d.status === 'awaiting' && d.expiry < Date.now()) {
+      d.status = 'expired';
+      ch = true;
+      if (state.settings.expiry) notify('⏰', 'Donation expired', d.food + ' (' + d.qty + ' kg) expired before pickup.');
+    }
+  });
+  if (ch) save();
+  return ch;
+}
+
+function toast(msg, icon){
+  const t = $('#toast');
+  t.textContent = (icon ? icon + '  ' : '') + msg;
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function modal(o){
+  modalOk = o.onOk || null;
+  $('#modal').innerHTML = '<h3>' + esc(o.title) + '</h3><p>' + (o.html || esc(o.text || '')) + '</p><div class="modal-actions">' + (o.noCancel ? '' : '<button class="btn btn-light" data-m="cancel">Cancel</button>') + '<button class="btn ' + (o.danger ? 'btn-danger' : 'btn-primary') + '" data-m="ok">' + esc(o.ok || 'OK') + '</button></div>';
+  $('#modalBack').classList.add('show');
+}
+
+function closeModal(){
+  $('#modalBack').classList.remove('show');
+}
+
+function countUp(el){
+  const t = +el.dataset.count || 0;
+  if (REDUCED || !t) { el.textContent = t; return; }
+  const s = performance.now(), D = 900;
+  (function f(n){
+    const p = Math.min(1, (n - s) / D);
+    el.textContent = Math.round(t * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(f);
+  })(s);
+}
+
+function afterFx(){
+  const v = $('#view-' + current);
+  $$('[data-count]', v).forEach(countUp);
+  const sp = $$('.progress span', v);
+  sp.forEach(s => { s.style.width = '0%'; });
+  requestAnimationFrame(() => requestAnimationFrame(() => sp.forEach(s => { s.style.width = s.dataset.w + '%'; })));
+}
+
+function applyFx(v){
+  $$('.page-heading,.hero,.stat-card,.panel,.quick-action,.impact-tile,.history-box,.pickup-card,.notification,.donation-row', v).forEach((e, i) => e.style.setProperty('--d', Math.min(i, 12)));
+  v.classList.add('fx');
+  clearTimeout(fxT);
+  fxT = setTimeout(() => v.classList.remove('fx'), 1700);
+}
+
+const row = x => '<div class="donation-row"><div class="food-thumb">' + emoji(x.category) + '</div><div class="donation-info"><strong>' + esc(x.food) + '</strong><small>' + esc(x.category) + ' · Expires ' + fmt(x.expiry) + '</small></div><div class="row-right"><strong>' + x.qty + ' kg</strong><small>' + badge(x.status) + '</small></div></div>';
+const sc = (i, t, n, l, note) => '<div class="stat-card"><div class="stat-top"><div class="stat-icon">' + i + '</div><span class="stat-trend">' + t + '</span></div><div class="stat-number" data-count="' + n + '">' + n + '</div><div class="stat-label">' + l + '</div><div class="stat-note">' + note + '</div></div>';
+
+function rOverview(){
+  const s = stats(), recent = state.donations.slice().sort((a,b) => b.created - a.created).slice(0,5), pct = Math.min(100, Math.round(s.kg / 100 * 100));
+  $('#ovBody').innerHTML = '<div class="hero"><div><div class="eyebrow">Today\'s impact</div><h2>Your surplus is becoming someone\'s next meal.</h2><p>List extra food in under a minute and nearby partner NGOs will claim it before it goes to waste.</p><div class="hero-actions"><button class="btn btn-lime" data-go="add">＋ Add surplus food</button><button class="btn btn-light" data-go="pickup">View pickups</button></div></div><div class="hero-stat"><div class="big" data-count="' + s.meals + '">' + s.meals + '</div><span>meals provided</span><small>' + s.kg + ' kg rescued so far</small></div></div>' +
+  '<div class="stats">' + sc('📦', 'All time', s.total, 'Total donations', 'Listings you created') + sc('⏳', s.cl + ' claimed', s.aw, 'Awaiting pickup', 'Open to NGOs') + sc('✅', s.rate + '% success', s.co, 'Collected', 'Successfully delivered') + sc('⚖', 'Rescued', s.kg, 'Kilograms shared', 'From collected donations') + '</div>' +
+  '<div class="two-col"><div class="panel"><div class="panel-head"><div><h3>Recent donations</h3><p>Your latest five listings</p></div><button class="text-link" data-go="donations">View all →</button></div><div class="donation-list">' + (recent.length ? recent.map(row).join('') : empty('📦', 'No donations yet', 'Add your first surplus food listing.')) + '</div></div>' +
+  '<div class="panel"><div class="panel-head"><div><h3>Your impact</h3><p>Based on collected food</p></div></div><div class="impact-card"><div class="impact-icon">🌱</div><strong>' + s.kg + ' kg</strong><span>Food saved from waste</span></div><div class="impact-card"><div class="impact-icon">🌍</div><strong>' + Math.round(s.kg * 2.5) + ' kg</strong><span>CO₂e emissions avoided</span></div><div class="progress-wrap"><div class="progress-label"><span>Monthly goal (100 kg)</span><span>' + pct + '%</span></div><div class="progress"><span data-w="' + pct + '" style="width:' + pct + '%"></span></div></div></div></div>' +
+  '<div class="panel"><div class="panel-head"><div><h3>Quick actions</h3><p>Jump straight to what you need</p></div></div><div class="quick-actions"><button class="quick-action" data-go="add"><span class="qa-icon">📦</span><strong>List new donation</strong><span>Share surplus food in a minute.</span></button><button class="quick-action" data-go="pickup"><span class="qa-icon">🚚</span><strong>Track pickups</strong><span>See who is collecting and when.</span></button><button class="quick-action" data-go="impact"><span class="qa-icon">📈</span><strong>View impact</strong><span>Meals, waste saved and goals.</span></button></div></div>';
+}
+
+function actions(x){
+  let b = '';
+  if (x.status === 'awaiting') b = '<button class="btn btn-light btn-small" data-act="edit" data-id="' + x.id + '">Edit</button>';
+  if (x.status === 'claimed') b = '<button class="btn btn-lime btn-small" data-act="collect" data-id="' + x.id + '">Mark collected</button>';
+  if (x.status === 'expired') b = '<button class="btn btn-light btn-small" data-act="relist" data-id="' + x.id + '">Re-list</button>';
+  return '<div class="table-actions">' + b + '<button class="btn btn-danger btn-small" data-act="delete" data-id="' + x.id + '">Delete</button></div>';
+}
+
+function rDonations(){
+  const q = filter.q.trim().toLowerCase();
+  const list = state.donations.filter(x => (filter.st === 'all' || x.status === filter.st) && (!q || (x.food + ' ' + x.category + ' ' + x.ngo).toLowerCase().indexOf(q) > -1)).sort((a,b) => b.created - a.created);
+  $('#donTable').innerHTML = list.length ? '<div class="table-wrap"><table class="data-table"><thead><tr><th>Food</th><th>Quantity</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead><tbody>' + list.map(x => '<tr data-rowid="' + x.id + '"><td><div class="food-cell"><div class="food-thumb">' + emoji(x.category) + '</div><div><strong>' + esc(x.food) + '</strong><small>' + esc(x.category) + '</small></div></div></td><td>' + x.qty + ' kg</td><td>' + fmt(x.expiry) + '</td><td>' + badge(x.status) + '</td><td>' + actions(x) + '</td></tr>').join('') + '</tbody></table></div>' : empty('🔎', 'No donations found', 'Try a different search or add a new donation.');
+}
+
+function rPickup(){
+  const l = state.donations.filter(x => x.status === 'claimed' || x.status === 'awaiting').sort((a,b) => a.expiry - b.expiry);
+  $('#pickupList').innerHTML = l.length ? l.map(x => '<div class="pickup-card" data-rowid="' + x.id + '"><div class="pickup-main"><div class="pickup-icon">' + emoji(x.category) + '</div><div><h4>' + esc(x.food) + ' · ' + x.qty + ' kg</h4><p>' + (x.status === 'claimed' ? 'Claimed by <b>' + esc(x.ngo) + '</b>' : 'Waiting for a partner NGO to claim') + '<br>Pickup from ' + esc(x.address) + (x.notes ? '<br>Note: ' + esc(x.notes) : '') + '</p><div class="pickup-meta"><span>⏰ Expires ' + fmt(x.expiry) + '</span><span>📦 ' + x.qty + ' kg</span></div></div></div><div class="pickup-actions">' + badge(x.status) + (x.status === 'claimed' ? '<button class="btn btn-lime btn-small" data-act="collect" data-id="' + x.id + '">Mark collected</button>' : '<button class="btn btn-light btn-small" data-act="claim" data-id="' + x.id + '">Simulate claim</button>') + '</div></div>').join('') : empty('🚚', 'No pending pickups', 'Claimed and open donations will appear here.');
+}
+
+function rHistory(){
+  const s = stats(), l = state.donations.filter(x => x.status === 'collected' || x.status === 'expired').sort((a,b) => b.created - a.created);
+  $('#histBody').innerHTML = '<div class="history-summary"><div class="history-box"><span>Completed pickups</span><strong data-count="' + s.co + '">' + s.co + '</strong></div><div class="history-box"><span>Kilograms shared</span><strong data-count="' + s.kg + '">' + s.kg + '</strong></div><div class="history-box"><span>Success rate</span><strong>' + s.rate + '%</strong></div></div><div class="panel">' + (l.length ? '<div class="table-wrap"><table class="data-table"><thead><tr><th>Food</th><th>Quantity</th><th>Listed</th><th>Partner</th><th>Outcome</th></tr></thead><tbody>' + l.map(x => '<tr><td><div class="food-cell"><div class="food-thumb">' + emoji(x.category) + '</div><div><strong>' + esc(x.food) + '</strong><small>' + esc(x.category) + '</small></div></div></td><td>' + x.qty + ' kg</td><td>' + fmt(x.created) + '</td><td>' + (esc(x.ngo) || '—') + '</td><td>' + badge(x.status) + '</td></tr>').join('') + '</tbody></table></div>' : empty('📜', 'No history yet', 'Completed donations will be listed here.')) + '</div>';
+}
+
+function rImpact(){
+  const s = stats(), ngos = new Set(state.donations.filter(x => x.status === 'collected' && x.ngo).map(x => x.ngo)).size, g = Math.min(100, Math.round(s.kg)), n = Math.round(ngos / NGOS.length * 100);
+  const bar = (l, v, t) => '<div class="progress-wrap"><div class="progress-label"><span>' + l + '</span><span>' + t + '</span></div><div class="progress"><span data-w="' + v + '" style="width:' + v + '%"></span></div></div>';
+  $('#impactBody').innerHTML = '<div class="impact-grid"><div class="impact-tile"><div class="tile-icon">🍽</div><strong data-count="' + s.meals + '">' + s.meals + '</strong><span>Meals provided</span></div><div class="impact-tile"><div class="tile-icon">🌱</div><strong data-count="' + s.kg + '">' + s.kg + ' kg</strong><span>Food rescued</span></div><div class="impact-tile"><div class="tile-icon">🌍</div><strong data-count="' + Math.round(s.kg * 2.5) + '">' + Math.round(s.kg * 2.5) + '</strong><span>kg CO₂e avoided</span></div></div><div class="panel" style="margin-top:18px"><div class="panel-head"><div><h3>Goals &amp; progress</h3><p>Keep going — every kilogram counts</p></div></div>' + bar('Monthly food goal (100 kg)', g, g + '%') + bar('Pickup success rate', s.rate, s.rate + '%') + bar('Partner NGOs helped', n, ngos + ' of ' + NGOS.length) + '</div>';
+}
+
+function rNotifs(){
+  $('#notifList').innerHTML = state.notifs.length ? '<div class="notification-list">' + state.notifs.map(n => '<div class="notification ' + (n.read ? '' : 'unread') + '"><div class="n-icon">' + n.icon + '</div><div class="notification-content"><strong>' + esc(n.title) + '</strong><p>' + esc(n.text) + '</p><small>' + ago(n.time) + '</small></div>' + (n.read ? '' : '<button data-act="read" data-id="' + n.id + '">Mark read</button>') + '<button data-act="dismiss" data-id="' + n.id + '" aria-label="Dismiss">✕</button></div>').join('') + '</div>' : empty('🔔', 'All caught up', 'New updates will show up here.');
+}
+
+function rProfile(){
+  const p = state.profile, s = stats();
+  $('#profileCard').innerHTML = '<div class="profile-avatar">' + esc(initials(p.name)) + '</div><h3>' + esc(p.name) + '</h3><p>' + esc(p.org) + ' · ' + esc(p.type) + '</p><span class="profile-badge">✔ Verified donor</span><div class="profile-stat-row"><div><strong>' + s.total + '</strong><span>Donations</span></div><div><strong>' + s.kg + '</strong><span>kg shared</span></div><div><strong>' + s.meals + '</strong><span>Meals</span></div></div>';
+}
+
+const R = {overview:rOverview, donations:rDonations, pickup:rPickup, history:rHistory, impact:rImpact, notifications:rNotifs, profile:rProfile};
+
+function updateChrome(){
+  const s = stats(), un = state.notifs.filter(n => !n.read).length, p = state.profile, h = new Date().getHours();
+  $('#navDonationCount').textContent = s.total;
+  $('#navPickupCount').textContent = s.aw + s.cl;
+  const nc = $('#navNotifCount');
+  nc.textContent = un;
+  nc.style.display = un ? '' : 'none';
+  $('#bellDot').style.display = un ? '' : 'none';
+  $('#sideAvatar').textContent = $('#topAvatar').textContent = initials(p.name);
+  $('#sideName').textContent = p.name;
+  $('#sideOrg').textContent = p.org;
+  $('#greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', ' + p.name.split(' ')[0];
+  $('#datePill').textContent = new Date().toLocaleDateString([],{weekday:'long',day:'numeric',month:'long'});
+  $('#crumbCur').textContent = TITLES[current];
+}
+
+function refresh(fx){
+  updateChrome();
+  if (R[current]) R[current]();
+  if (fx) afterFx();
+}
+
+function show(v){
+  if (!TITLES[v]) v = 'overview';
+  current = v;
+  if (v !== 'add') editId = null;
+  $$('.view').forEach(x => x.classList.toggle('active', x.id === 'view-' + v));
+  $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  $('#sidebar').classList.remove('open');
+  if (v === 'add') prepAdd();
+  if (v === 'profile') prepProfile();
+  window.scrollTo(0,0);
+  refresh(true);
+  applyFx($('#view-' + v));
+}
+
+function go(v){
+  if (location.hash.slice(1) === v) show(v);
+  else location.hash = v;
+}
+
+function prepAdd(){
+  const f = $('#addForm');
+  if (editId !== null && nd(editId)) {
+    const d = nd(editId);
+    $('#f-food').value = d.food;
+    $('#f-cat').value = d.category;
+    $('#f-qty').value = d.qty;
+    $('#f-exp').value = toLocalInput(d.expiry);
+    $('#f-addr').value = d.address;
+    $('#f-notes').value = d.notes || '';
+    $('#addTitle').textContent = 'Edit donation';
+    $('#addSub').textContent = 'Update the details of your listing.';
+    $('#addSubmit').textContent = 'Save changes';
+    $('#addReset').textContent = 'Cancel';
+  } else {
+    editId = null;
+    f.reset();
+    $('#f-exp').value = toLocalInput(Date.now() + 24*H);
+    $('#f-addr').value = state.profile.address || '';
+    $('#addTitle').textContent = 'Add surplus food';
+    $('#addSub').textContent = 'Tell partner NGOs what you have available and when it expires.';
+    $('#addSubmit').textContent = 'Publish donation';
+    $('#addReset').textContent = 'Clear form';
+  }
+  $('#f-exp').min = toLocalInput(Date.now());
+}
+
+function scheduleClaim(id){
+  setTimeout(() => {
+    const d = nd(id);
+    if (!d || d.status !== 'awaiting') return;
+    d.status = 'claimed';
+    d.ngo = NGOS[Math.floor(Math.random() * NGOS.length)];
+    if (state.settings.claim) {
+      notify('🤝', d.ngo + ' claimed your donation', d.food + ' (' + d.qty + ' kg) is ready for pickup.');
+      toast(d.ngo + ' claimed "' + d.food + '"', '🤝');
+    }
+    save();
+    refresh();
+  }, 12000 + Math.random() * 8000);
+}
+
+function onAddSubmit(e){
+  e.preventDefault();
+  const btn = $('#addSubmit');
+  if (btn.classList.contains('loading')) return;
+  const food = $('#f-food').value.trim(), qty = parseFloat($('#f-qty').value), exp = new Date($('#f-exp').value).getTime(), addr = $('#f-addr').value.trim();
+  if (!food || !(qty > 0) || isNaN(exp) || !addr) { toast('Please complete all required fields', '⚠'); return; }
+  if (exp <= Date.now()) { toast('Best-before time must be in the future', '⚠'); return; }
+  const label = btn.textContent;
+  btn.classList.add('loading');
+  btn.textContent = 'Saving…';
+  setTimeout(() => {
+    btn.classList.remove('loading');
+    btn.textContent = label;
+    const data = {food: food, category: $('#f-cat').value, qty: qty, expiry: exp, address: addr, notes: $('#f-notes').value.trim()};
+    if (editId !== null && nd(editId)) {
+      Object.assign(nd(editId), data);
+      toast('Donation updated', '✏');
+    } else {
+      const id = state.nextId++;
+      state.donations.unshift(Object.assign({id: id, status: 'awaiting', ngo: '', created: Date.now()}, data));
+      notify('📦', 'Donation listed', food + ' (' + qty + ' kg) is now visible to partner NGOs.');
+      toast('Donation published', '🎉');
+      scheduleClaim(id);
+    }
+    editId = null;
+    save();
+    go('donations');
+  }, REDUCED ? 0 : 650);
+}
+
+function act(a, id){
+  const d = nd(id);
+  if (a === 'edit' && d) { editId = id; go('add'); }
+  else if (a === 'collect' && d) {
+    d.status = 'collected';
+    notify('✅', 'Pickup completed', d.food + ' (' + d.qty + ' kg) was collected' + (d.ngo ? ' by ' + d.ngo : '') + '.');
+    save();
+    refresh();
+    toast('Marked as collected', '✅');
+  } else if (a === 'claim' && d) {
+    d.status = 'claimed';
+    d.ngo = NGOS[Math.floor(Math.random() * NGOS.length)];
+    notify('🤝', d.ngo + ' claimed your donation', d.food + ' (' + d.qty + ' kg) is ready for pickup.');
+    save();
+    refresh();
+    toast(d.ngo + ' claimed it', '🤝');
+  } else if (a === 'relist' && d) {
+    d.status = 'awaiting';
+    d.expiry = Date.now() + 24*H;
+    d.created = Date.now();
+    save();
+    refresh();
+    toast('Donation re-listed for 24 hours', '🔁');
+    scheduleClaim(id);
+  } else if (a === 'delete' && d) {
+    modal({
+      title: 'Delete this donation?',
+      text: '"' + d.food + '" will be permanently removed from your records.',
+      ok: 'Delete',
+      danger: true,
+      onOk: () => {
+        $$('[data-rowid="' + id + '"]').forEach(e => e.classList.add('removing'));
+        setTimeout(() => {
+          state.donations = state.donations.filter(x => x.id !== id);
+          save();
+          refresh();
+          toast('Donation deleted', '🗑');
+        }, REDUCED ? 0 : 300);
+      }
+    });
+  } else if (a === 'read') {
+    const n = state.notifs.find(x => x.id === id);
+    if (n) { n.read = true; save(); refresh(); }
+  } else if (a === 'dismiss') {
+    state.notifs = state.notifs.filter(x => x.id !== id);
+    save();
+    refresh();
+  } else if (a === 'readall') {
+    state.notifs.forEach(n => n.read = true);
+    save();
+    refresh();
+    toast('All notifications marked as read', '✅');
+  } else if (a === 'clearall') {
+    if (!state.notifs.length) return;
+    state.notifs = [];
+    save();
+    refresh();
+    toast('Notifications cleared', '🧹');
+  }
+}
+
+function prepProfile(){
+  const p = state.profile;
+  $('#p-name').value = p.name;
+  $('#p-org').value = p.org;
+  $('#p-type').value = p.type;
+  $('#p-phone').value = p.phone || '';
+  $('#p-email').value = p.email;
+  $('#p-addr').value = p.address || '';
+  $('#set-claim').checked = state.settings.claim;
+  $('#set-expiry').checked = state.settings.expiry;
+  $('#set-weekly').checked = state.settings.weekly;
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('.btn');
+  if (b && !b.classList.contains('loading')) {
+    const r = b.getBoundingClientRect(), sz = Math.max(r.width, r.height) * 2, s = document.createElement('span');
+    s.className = 'ripple';
+    s.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;left:' + (e.clientX - r.left - sz/2) + 'px;top:' + (e.clientY - r.top - sz/2) + 'px';
+    b.appendChild(s);
+    setTimeout(() => s.remove(), 650);
+  }
+  const nv = e.target.closest('.nav-btn[data-view]');
+  if (nv) { go(nv.dataset.view); return; }
+  const g = e.target.closest('[data-go]');
+  if (g) { go(g.dataset.go); return; }
+  const a = e.target.closest('[data-act]');
+  if (a) { act(a.dataset.act, a.dataset.id ? parseInt(a.dataset.id, 10) : null); return; }
+  const m = e.target.closest('[data-m]');
+  if (m) {
+    const ok = m.dataset.m === 'ok' && modalOk;
+    const fn = modalOk;
+    closeModal();
+    modalOk = null;
+    if (ok && fn) fn();
+    return;
+  }
+  if (e.target.id === 'modalBack') { closeModal(); modalOk = null; }
+  if (!e.target.closest('#sidebar') && !e.target.closest('#menuBtn')) $('#sidebar').classList.remove('open');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); modalOk = null; $('#sidebar').classList.remove('open'); }
+});
+
+window.addEventListener('hashchange', () => show(location.hash.slice(1) || 'overview'));
+$('#menuBtn').addEventListener('click', () => $('#sidebar').classList.toggle('open'));
+$('#bellBtn').addEventListener('click', () => go('notifications'));
+$('#helpBtn').addEventListener('click', () => modal({title:'Quick guide', html:'1. Tap <b>Add surplus food</b> and fill in the details.<br>2. Partner NGOs claim your listing.<br>3. Mark it <b>collected</b> when they arrive.<br>4. Track meals and waste saved in the <b>Impact report</b>.', ok:'Got it', noCancel:true}));
+$('#addForm').addEventListener('submit', onAddSubmit);
+$('#addReset').addEventListener('click', () => { if (editId !== null) { editId = null; go('donations'); } else prepAdd(); });
+
+function setSearch(v){
+  filter.q = v;
+  $('#donSearch').value = v;
+  $('#topSearch').value = v;
+  if (current !== 'donations') go('donations');
+  else refresh();
+}
+
+$('#donSearch').addEventListener('input', e => setSearch(e.target.value));
+$('#topSearch').addEventListener('input', e => setSearch(e.target.value));
+$('#donStatus').addEventListener('change', e => { filter.st = e.target.value; refresh(); });
+
+$('#profileForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const p = state.profile;
+  p.name = $('#p-name').value.trim() || p.name;
+  p.org = $('#p-org').value.trim() || p.org;
+  p.type = $('#p-type').value;
+  p.phone = $('#p-phone').value.trim();
+  p.email = $('#p-email').value.trim();
+  p.address = $('#p-addr').value.trim();
+  save();
+  refresh();
+  toast('Profile saved', '💾');
+});
+
+[['claim','set-claim'],['expiry','set-expiry'],['weekly','set-weekly']].forEach(x => $('#' + x[1]).addEventListener('change', e => { state.settings[x[0]] = e.target.checked; save(); toast('Preference updated', '⚙'); }));
+
+$('#resetData').addEventListener('click', () => modal({
+  title: 'Reset demo data?',
+  text: 'This replaces all your current data with the sample data.',
+  ok: 'Reset',
+  danger: true,
+  onOk: () => { state = seed(); save(); prepProfile(); refresh(); toast('Demo data restored', '♻'); }
+}));
+
+state = load();
+$('#f-cat').innerHTML = Object.keys(CATS).map(c => '<option value="' + esc(c) + '">' + emoji(c) + ' ' + esc(c) + '</option>').join('');
+sweep();
+state.donations.filter(d => d.status === 'awaiting').forEach(d => scheduleClaim(d.id));
+setInterval(() => { if (sweep()) refresh(); }, 60000);
+show(location.hash.slice(1) || 'overview');
+})();
+</script>
+</body>
+</html>

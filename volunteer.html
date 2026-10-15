@@ -1,0 +1,3107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17483c">
+<title>FoodBridge | Volunteer Workspace</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --forest:#17483c;
+  --forest-dark:#123c32;
+  --forest-light:#235c4d;
+  --lime:#d6f477;
+  --lime-hover:#c8ed60;
+  --cream:#f7f5eb;
+  --paper:#ffffff;
+  --ink:#193b32;
+  --muted:#87938a;
+  --line:#e9e8dc;
+  --leaf:#3f9a54;
+  --sun:#f4b34c;
+  --red:#dc6a56;
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Inter","Segoe UI",Arial,sans-serif;
+  --shadow:0 8px 28px rgba(31,65,50,.045);
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html {
+  scroll-behavior:smooth;
+}
+
+body {
+  min-height:100vh;
+  font-family:var(--sans);
+  color:var(--ink);
+  background:var(--cream);
+  -webkit-font-smoothing:antialiased;
+}
+
+button,input,select,textarea {
+  font:inherit;
+}
+
+button {
+  cursor:pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline:3px solid var(--sun);
+  outline-offset:3px;
+}
+
+.hidden {
+  display:none!important;
+}
+
+/* APP LAYOUT */
+
+.app {
+  min-height:100vh;
+}
+
+.sidebar {
+  position:fixed;
+  z-index:20;
+  top:5px;
+  bottom:5px;
+  left:5px;
+  width:245px;
+  padding:25px 16px 18px;
+  border-radius:12px;
+  color:#fff;
+  background:var(--forest);
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#729084 transparent;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  text-decoration:none;
+  color:white;
+  padding:2px 10px 30px;
+}
+
+.brand-mark {
+  flex-shrink:0;
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.08);
+}
+
+.brand-name {
+  font-family:var(--serif);
+  font-weight:800;
+  font-size:26px;
+  line-height:1;
+  letter-spacing:-1px;
+}
+
+.brand-name span {
+  color:var(--lime);
+}
+
+.brand-caption {
+  font-size:9px;
+  color:#b2c8b8;
+  letter-spacing:1.5px;
+  margin-top:6px;
+}
+
+.nav-label {
+  color:#9cb7a8;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:1.5px;
+  padding:10px 13px;
+  margin-top:5px;
+}
+
+.nav {
+  display:grid;
+  gap:5px;
+}
+
+.nav-btn {
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:47px;
+  padding:12px 13px;
+  text-align:left;
+  color:#d1dfd6;
+  border:0;
+  border-radius:12px;
+  background:transparent;
+  font-size:12px;
+  font-weight:500;
+  transition:background .18s,color .18s;
+}
+
+.nav-btn:hover {
+  background:rgba(255,255,255,.08);
+  color:white;
+}
+
+.nav-btn.active {
+  background:var(--lime);
+  color:var(--forest-dark);
+  font-weight:700;
+}
+
+.nav-icon {
+  display:grid;
+  place-items:center;
+  width:17px;
+  flex-shrink:0;
+  font-size:16px;
+}
+
+.nav-count {
+  display:inline-grid;
+  place-items:center;
+  min-width:21px;
+  height:21px;
+  padding:0 5px;
+  margin-left:auto;
+  border-radius:99px;
+  background:rgba(255,255,255,.13);
+  color:#dbe9df;
+  font-size:10px;
+}
+
+.nav-btn.active .nav-count {
+  background:rgba(23,72,60,.1);
+  color:var(--forest);
+}
+
+.sidebar-help {
+  margin-top:auto;
+  padding:17px 14px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:17px;
+  background:rgba(0,0,0,.09);
+}
+
+.help-icon {
+  font-size:22px;
+  margin-bottom:12px;
+}
+
+.sidebar-help h4 {
+  font-size:12px;
+  margin-bottom:8px;
+}
+
+.sidebar-help p {
+  font-size:11px;
+  color:#b9cfc1;
+  line-height:1.8;
+}
+
+.sidebar-help button {
+  margin-top:12px;
+  background:transparent;
+  border:0;
+  color:var(--lime);
+  font-size:11px;
+  font-weight:700;
+}
+
+/* MAIN WORKSPACE */
+
+.workspace {
+  min-height:100vh;
+  margin-left:255px;
+}
+
+.topbar {
+  min-height:78px;
+  padding:15px clamp(18px,3vw,42px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  background:rgba(250,249,241,.96);
+  border-bottom:1px solid rgba(230,228,214,.65);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.breadcrumb {
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.breadcrumb strong {
+  color:var(--forest);
+}
+
+.top-actions {
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.search-wrap {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:240px;
+  height:43px;
+  padding:0 13px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+}
+
+.search-wrap span {
+  font-size:15px;
+}
+
+.search-wrap input {
+  width:100%;
+  min-width:0;
+  border:0;
+  outline:none;
+  background:transparent;
+  font-size:11px;
+  color:var(--ink);
+}
+
+.icon-btn {
+  width:43px;
+  height:43px;
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:white;
+  font-size:18px;
+  position:relative;
+}
+
+.notification-dot {
+  position:absolute;
+  top:7px;
+  right:7px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--red);
+  border:1px solid white;
+}
+
+.avatar {
+  width:42px;
+  height:42px;
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#e8f0d2;
+  color:var(--forest);
+  font-size:12px;
+  font-weight:700;
+  border:0;
+}
+
+.content {
+  max-width:1600px;
+  padding:29px clamp(18px,3vw,42px) 50px;
+  margin:auto;
+}
+
+.page {
+  display:none;
+  animation:fadeIn .18s ease;
+}
+
+.page.active {
+  display:block;
+}
+
+@keyframes fadeIn {
+  from { opacity:.5; transform:translateY(3px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.eyebrow {
+  color:#859684;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  margin-bottom:9px;
+}
+
+.page-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:18px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
+}
+
+.page-heading h1 {
+  font-family:var(--serif);
+  font-size:clamp(29px,3.2vw,42px);
+  line-height:1.16;
+  letter-spacing:-1.3px;
+  color:var(--forest);
+}
+
+.page-heading p {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.8;
+  margin-top:8px;
+}
+
+.date-chip {
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fffdf7;
+  padding:12px 16px;
+  color:#77857b;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+/* IMPACT BANNER */
+
+.impact-banner {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 210px;
+  align-items:center;
+  gap:20px;
+  min-height:250px;
+  padding:30px;
+  margin-bottom:24px;
+  border-radius:23px;
+  color:white;
+  background:
+    radial-gradient(circle at 85% 20%,rgba(255,255,255,.035) 0 90px,transparent 91px),
+    var(--forest);
+  overflow:hidden;
+  position:relative;
+}
+
+.impact-banner:after {
+  content:"✳";
+  position:absolute;
+  right:150px;
+  top:-65px;
+  color:rgba(255,255,255,.025);
+  font-size:250px;
+  pointer-events:none;
+}
+
+.banner-copy {
+  max-width:560px;
+  position:relative;
+  z-index:1;
+}
+
+.banner-label {
+  color:var(--lime);
+  font-size:10px;
+  letter-spacing:1.7px;
+  font-weight:700;
+  margin-bottom:13px;
+}
+
+.banner-copy h2 {
+  font-family:var(--serif);
+  font-size:clamp(25px,3vw,35px);
+  line-height:1.16;
+  letter-spacing:-.7px;
+  max-width:460px;
+}
+
+.banner-copy p {
+  color:#c1d3c8;
+  font-size:12px;
+  line-height:1.9;
+  margin-top:12px;
+  max-width:510px;
+}
+
+.banner-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:19px;
+}
+
+.btn {
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+  min-height:43px;
+  padding:11px 17px;
+  border:0;
+  border-radius:12px;
+  font-size:11px;
+  font-weight:700;
+  transition:transform .18s,background .18s;
+}
+
+.btn:hover {
+  transform:translateY(-1px);
+}
+
+.btn-lime {
+  background:var(--lime);
+  color:var(--forest-dark);
+}
+
+.btn-lime:hover {
+  background:var(--lime-hover);
+}
+
+.btn-white {
+  background:#fff;
+  color:var(--forest);
+}
+
+.btn-dark {
+  background:var(--forest);
+  color:#fff;
+}
+
+.btn-outline {
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--forest);
+}
+
+.banner-stat {
+  min-height:145px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  background:rgba(0,0,0,.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  padding:20px;
+  position:relative;
+  z-index:1;
+  text-align:center;
+}
+
+.banner-stat strong {
+  font-family:var(--serif);
+  font-size:48px;
+  line-height:1;
+  color:var(--lime);
+}
+
+.banner-stat span {
+  font-size:11px;
+  color:#e0e9e1;
+  margin-top:10px;
+}
+
+.banner-stat small {
+  color:#9fb8aa;
+  font-size:10px;
+  margin-top:7px;
+}
+
+/* KPI CARDS */
+
+.stats-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.stat-card {
+  min-width:0;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:19px;
+  box-shadow:var(--shadow);
+}
+
+.stat-top {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:17px;
+}
+
+.stat-icon {
+  display:grid;
+  place-items:center;
+  width:39px;
+  height:39px;
+  border-radius:13px;
+  background:#edf3e1;
+  font-size:18px;
+}
+
+.stat-pill {
+  display:inline-block;
+  padding:5px 8px;
+  border-radius:99px;
+  color:#718b75;
+  background:#eff5e8;
+  font-size:9px;
+  white-space:nowrap;
+}
+
+.stat-card strong {
+  display:block;
+  font-family:var(--serif);
+  color:var(--forest);
+  font-size:32px;
+  line-height:1.1;
+  overflow-wrap:anywhere;
+}
+
+.stat-card p {
+  color:var(--muted);
+  font-size:11px;
+  margin-top:6px;
+  line-height:1.7;
+}
+
+.stat-card small {
+  display:block;
+  color:#a2aaa0;
+  font-size:10px;
+  margin-top:10px;
+  line-height:1.6;
+}
+
+/* GENERAL SECTION AND CARDS */
+
+.section-grid {
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(260px,.85fr);
+  gap:20px;
+  align-items:start;
+  margin-bottom:21px;
+}
+
+.section-grid.equal {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.card {
+  min-width:0;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:20px;
+  padding:21px;
+  box-shadow:var(--shadow);
+}
+
+.card-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:17px;
+}
+
+.card-header h2 {
+  font-family:var(--serif);
+  font-size:21px;
+  line-height:1.35;
+  color:var(--forest);
+  letter-spacing:-.4px;
+}
+
+.card-header p {
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+  margin-top:5px;
+}
+
+.text-link {
+  color:var(--forest-light);
+  font-size:11px;
+  font-weight:700;
+  background:none;
+  border:0;
+  white-space:nowrap;
+}
+
+.list {
+  display:grid;
+  gap:11px;
+}
+
+.item {
+  border:1px solid #ecebe2;
+  border-radius:15px;
+  padding:15px;
+  background:#fffefa;
+  min-width:0;
+}
+
+.item-head {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.item h3 {
+  color:var(--forest);
+  font-size:13px;
+  line-height:1.65;
+  overflow-wrap:anywhere;
+}
+
+.item p {
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.8;
+  margin-top:5px;
+  overflow-wrap:anywhere;
+}
+
+.status {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:99px;
+  padding:5px 9px;
+  font-size:9px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.status.claimed {
+  color:#94600f;
+  background:#fff0d3;
+}
+
+.status.assigned {
+  color:#365c9a;
+  background:#e4edff;
+}
+
+.status.picked_up {
+  color:#315e93;
+  background:#e2edff;
+}
+
+.status.in_transit {
+  color:#176746;
+  background:#def2e5;
+}
+
+.status.delivered {
+  color:#2d7137;
+  background:#e4f3d8;
+}
+
+.status.warning {
+  color:#a04430;
+  background:#ffebe5;
+}
+
+.status.available {
+  color:#287342;
+  background:#e2f3dc;
+}
+
+.status.busy {
+  color:#8a5a0b;
+  background:#fff0d3;
+}
+
+.item-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+
+.small-btn {
+  border:0;
+  border-radius:10px;
+  padding:10px 12px;
+  color:white;
+  background:var(--forest);
+  font-size:10px;
+  font-weight:700;
+  transition:.15s;
+}
+
+.small-btn:hover {
+  background:var(--forest-light);
+}
+
+.small-btn.light {
+  background:#edf3e5;
+  color:var(--forest);
+}
+
+.small-btn.lime {
+  background:var(--lime);
+  color:var(--forest);
+}
+
+.small-btn:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.empty {
+  border:1px dashed #e4e5d9;
+  border-radius:14px;
+  padding:25px 15px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.9;
+}
+
+/* DELIVERY PROGRESS */
+
+.progress {
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.progress span {
+  padding:6px 8px;
+  border-radius:99px;
+  border:1px solid var(--line);
+  color:#99a198;
+  font-size:9px;
+}
+
+.progress span.done {
+  background:#e4f3d8;
+  border-color:#d4e9c8;
+  color:var(--forest);
+}
+
+.quantity-row {
+  display:grid;
+  grid-template-columns:1fr 110px;
+  gap:10px;
+  margin-top:13px;
+}
+
+.field {
+  margin-bottom:14px;
+  min-width:0;
+}
+
+.field label {
+  display:block;
+  color:#52675a;
+  font-size:11px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width:100%;
+  min-width:0;
+  min-height:43px;
+  padding:10px 12px;
+  border:1px solid #e4e5d9;
+  border-radius:11px;
+  color:var(--ink);
+  background:white;
+  outline:none;
+  font-size:12px;
+}
+
+.field textarea {
+  min-height:90px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color:var(--leaf);
+}
+
+.field-help {
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+  margin-top:6px;
+}
+
+/* IMPACT AND ACHIEVEMENTS */
+
+.achievement {
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid #efeee6;
+}
+
+.achievement:last-child {
+  border-bottom:0;
+}
+
+.achievement-icon {
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  flex-shrink:0;
+  border-radius:13px;
+  background:#eff4e5;
+  font-size:19px;
+}
+
+.achievement-copy {
+  flex:1;
+  min-width:0;
+}
+
+.achievement-copy h3 {
+  color:var(--forest);
+  font-size:12px;
+  line-height:1.6;
+}
+
+.achievement-copy p {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.8;
+  margin-top:4px;
+}
+
+.achievement-progress {
+  width:100%;
+  height:5px;
+  border-radius:99px;
+  background:#edf0e7;
+  margin-top:9px;
+  overflow:hidden;
+}
+
+.achievement-progress span {
+  display:block;
+  height:100%;
+  border-radius:99px;
+  background:var(--leaf);
+}
+
+.history-row {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid #efeee6;
+}
+
+.history-row:last-child {
+  border-bottom:0;
+}
+
+.history-row h3 {
+  color:var(--forest);
+  font-size:12px;
+  line-height:1.7;
+}
+
+.history-row p {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.8;
+  margin-top:4px;
+}
+
+.history-quantity {
+  text-align:right;
+  color:var(--forest);
+  font-weight:700;
+  font-size:12px;
+  flex-shrink:0;
+}
+
+/* NOTIFICATIONS */
+
+.notification-tools {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.notification {
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:15px 0;
+  border-bottom:1px solid #efeee6;
+}
+
+.notification:last-child {
+  border-bottom:0;
+}
+
+.notification.unread {
+  background:#fbfcf6;
+}
+
+.notification-icon {
+  width:39px;
+  height:39px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  background:#edf3e1;
+  border-radius:13px;
+  font-size:17px;
+}
+
+.notification-copy {
+  min-width:0;
+  flex:1;
+}
+
+.notification-copy h3 {
+  color:var(--forest);
+  font-size:12px;
+  line-height:1.7;
+}
+
+.notification-copy p {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.8;
+  margin-top:4px;
+}
+
+/* PROFILE */
+
+.profile-top {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:16px;
+  border-radius:15px;
+  background:#f7f8f0;
+  margin-bottom:20px;
+}
+
+.profile-avatar {
+  display:grid;
+  place-items:center;
+  width:56px;
+  height:56px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:#e2efc5;
+  color:var(--forest);
+  font-weight:800;
+  font-size:16px;
+}
+
+.profile-top h3 {
+  color:var(--forest);
+  font-family:var(--serif);
+  font-size:19px;
+}
+
+.profile-top p {
+  color:var(--muted);
+  font-size:10px;
+  margin-top:5px;
+  line-height:1.7;
+}
+
+.form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 13px;
+}
+
+.form-grid .full {
+  grid-column:1/-1;
+}
+
+.form-message {
+  color:var(--red);
+  font-size:11px;
+  line-height:1.7;
+  margin:7px 0;
+}
+
+.form-submit {
+  width:100%;
+  min-height:44px;
+  border:0;
+  border-radius:12px;
+  background:var(--lime);
+  color:var(--forest);
+  font-size:11px;
+  font-weight:800;
+}
+
+.preference-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:15px 0;
+  border-bottom:1px solid #efeee6;
+}
+
+.preference-row:last-child {
+  border-bottom:0;
+}
+
+.preference-row strong {
+  display:block;
+  color:var(--forest);
+  font-size:12px;
+}
+
+.preference-row p {
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.8;
+  margin-top:5px;
+}
+
+.preference-value {
+  color:var(--forest);
+  font-size:11px;
+  font-weight:700;
+  text-align:right;
+}
+
+/* TOAST AND FOOTER */
+
+.toast {
+  position:fixed;
+  z-index:100;
+  bottom:25px;
+  left:50%;
+  transform:translate(-50%,20px);
+  max-width:90vw;
+  width:max-content;
+  padding:13px 19px;
+  border-radius:12px;
+  background:var(--forest);
+  color:white;
+  font-size:11px;
+  line-height:1.6;
+  box-shadow:0 12px 30px rgba(0,0,0,.12);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show {
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.toast.error {
+  background:#a84433;
+}
+
+.footer {
+  color:#929a8e;
+  text-align:center;
+  font-size:10px;
+  padding:28px 10px 0;
+  line-height:1.8;
+}
+
+.mobile-menu {
+  display:none;
+}
+
+@media(min-width:1450px) {
+  .content {
+    padding-left:42px;
+    padding-right:42px;
+  }
+}
+
+@media(max-width:1150px) {
+  .sidebar {
+    width:220px;
+  }
+
+  .workspace {
+    margin-left:230px;
+  }
+
+  .section-grid {
+    grid-template-columns:1fr;
+  }
+
+  .impact-banner {
+    grid-template-columns:minmax(0,1fr) 170px;
+  }
+
+  .search-wrap {
+    width:180px;
+  }
+}
+
+@media(max-width:800px) {
+  .sidebar {
+    width:250px;
+    transform:translateX(-110%);
+    transition:transform .22s ease;
+    box-shadow:0 10px 40px rgba(0,0,0,.15);
+  }
+
+  .sidebar.open {
+    transform:translateX(0);
+  }
+
+  .workspace {
+    margin-left:0;
+  }
+
+  .mobile-menu {
+    display:grid;
+  }
+
+  .topbar {
+    min-height:68px;
+    padding:12px 17px;
+  }
+
+  .breadcrumb {
+    display:none;
+  }
+
+  .top-actions {
+    margin-left:auto;
+  }
+
+  .impact-banner {
+    grid-template-columns:1fr;
+  }
+
+  .banner-stat {
+    min-height:110px;
+  }
+
+  .banner-stat strong {
+    font-size:39px;
+  }
+
+  .stats-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .section-grid.equal {
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:520px) {
+  .content {
+    padding:22px 13px 35px;
+  }
+
+  .topbar {
+    padding:10px 12px;
+    gap:8px;
+  }
+
+  .search-wrap {
+    width:min(42vw,170px);
+    height:39px;
+    padding:0 9px;
+  }
+
+  .search-wrap input {
+    font-size:10px;
+  }
+
+  .icon-btn,.avatar {
+    width:38px;
+    height:38px;
+  }
+
+  .top-actions {
+    gap:6px;
+  }
+
+  .page-heading h1 {
+    font-size:30px;
+  }
+
+  .impact-banner {
+    padding:22px 19px;
+    border-radius:18px;
+  }
+
+  .banner-copy h2 {
+    font-size:27px;
+  }
+
+  .stats-grid {
+    gap:10px;
+  }
+
+  .stat-card {
+    padding:14px;
+    border-radius:15px;
+  }
+
+  .stat-card strong {
+    font-size:27px;
+  }
+
+  .stat-pill {
+    font-size:8px;
+  }
+
+  .card {
+    padding:16px;
+    border-radius:16px;
+  }
+
+  .card-header h2 {
+    font-size:19px;
+  }
+
+  .quantity-row {
+    grid-template-columns:1fr;
+  }
+
+  .form-grid {
+    grid-template-columns:1fr;
+  }
+
+  .form-grid .full {
+    grid-column:auto;
+  }
+
+  .date-chip {
+    padding:9px 11px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation:none!important;
+    transition:none!important;
+    scroll-behavior:auto!important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <a class="brand" href="#" data-page="overview">
+      <span class="brand-mark">
+        <svg width="25" height="25" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M2 17c3-9 17-9 20 0" stroke="#d6f477" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M6 17v-3M12 17V9M18 17v-3" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span>
+        <span class="brand-name">Food<span>Bridge</span></span>
+        <span class="brand-caption" style="display:block">GOOD FOOD. GOOD PURPOSE.</span>
+      </span>
+    </a>
+
+    <div class="nav-label">WORKSPACE</div>
+
+    <nav class="nav" aria-label="Volunteer workspace">
+      <button class="nav-btn active" data-page="overview">
+        <span class="nav-icon">⌂</span>
+        Dashboard overview
+      </button>
+
+      <button class="nav-btn" data-page="pickups">
+        <span class="nav-icon">＋</span>
+        Available pickups
+        <span class="nav-count" id="availableCount">0</span>
+      </button>
+
+      <button class="nav-btn" data-page="deliveries">
+        <span class="nav-icon">▤</span>
+        My deliveries
+        <span class="nav-count" id="activeCount">0</span>
+      </button>
+
+      <button class="nav-btn" data-page="history">
+        <span class="nav-icon">↻</span>
+        Delivery history
+      </button>
+
+      <button class="nav-btn" data-page="impact">
+        <span class="nav-icon">♧</span>
+        Impact report
+      </button>
+    </nav>
+
+    <div class="nav-label">ACCOUNT</div>
+
+    <nav class="nav" aria-label="Account">
+      <button class="nav-btn" data-page="notifications">
+        <span class="nav-icon">🔔</span>
+        Notifications
+        <span class="nav-count" id="unreadCount">0</span>
+      </button>
+
+      <button class="nav-btn" data-page="profile">
+        <span class="nav-icon">⚙</span>
+        Profile & settings
+      </button>
+
+      <button class="nav-btn" id="sidebarLogout">
+        <span class="nav-icon">↗</span>
+        Log out
+      </button>
+    </nav>
+
+    <div class="sidebar-help">
+      <div class="help-icon">💬</div>
+      <h4>Need help?</h4>
+      <p>Every pickup counts. Keep your details updated and record each delivery accurately.</p>
+      <button type="button" data-page="profile">Manage my profile →</button>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <div class="workspace">
+
+    <header class="topbar">
+      <button class="icon-btn mobile-menu" id="menuToggle" aria-label="Open navigation">☰</button>
+
+      <div class="breadcrumb">
+        Workspace / <strong id="breadcrumbText">Dashboard overview</strong>
+      </div>
+
+      <div class="top-actions">
+        <label class="search-wrap">
+          <span>🔎</span>
+          <input id="globalSearch" type="search" placeholder="Search donations..." aria-label="Search donations">
+        </label>
+
+        <button class="icon-btn" id="notificationShortcut" aria-label="Open notifications">
+          🔔
+          <span class="notification-dot hidden" id="notificationDot"></span>
+        </button>
+
+        <button class="avatar" id="avatarButton" data-page="profile" aria-label="Open profile">V</button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- OVERVIEW PAGE -->
+      <section class="page active" id="page-overview">
+
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">VOLUNTEER DASHBOARD</div>
+            <h1 id="welcomeHeading">Good day, Volunteer</h1>
+            <p>Here's how your volunteering is making a difference.</p>
+          </div>
+          <div class="date-chip" id="todayDate"></div>
+        </div>
+
+        <section class="impact-banner">
+          <div class="banner-copy">
+            <div class="banner-label">YOUR COMMUNITY IMPACT</div>
+            <h2>Your time can turn surplus food into someone's next meal.</h2>
+            <p>Accept pickups, keep delivery progress updated, and help good food reach nearby communities.</p>
+            <div class="banner-actions">
+              <button class="btn btn-lime" data-page="pickups">＋ Find a pickup</button>
+              <button class="btn btn-white" data-page="deliveries">View deliveries</button>
+            </div>
+          </div>
+
+          <div class="banner-stat">
+            <strong id="bannerMeals">0</strong>
+            <span>meals rescued</span>
+            <small id="bannerKg">Food collected through your deliveries</small>
+          </div>
+        </section>
+
+        <section class="stats-grid" id="overviewStats"></section>
+
+        <div class="section-grid">
+
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Available pickups</h2>
+                <p>Food donations waiting for collection.</p>
+              </div>
+              <button class="text-link" data-page="pickups">View all →</button>
+            </div>
+            <div class="list" id="overviewPickups"></div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Your impact</h2>
+                <p>Your latest volunteer milestones.</p>
+              </div>
+              <button class="text-link" data-page="impact">View report →</button>
+            </div>
+            <div id="overviewAchievements"></div>
+          </article>
+
+        </div>
+
+        <div class="section-grid equal">
+
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Current deliveries</h2>
+                <p>Keep your collection and delivery status up to date.</p>
+              </div>
+              <button class="text-link" data-page="deliveries">View all →</button>
+            </div>
+            <div class="list" id="overviewDeliveries"></div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Recent notifications</h2>
+                <p>Pickup reminders and activity updates.</p>
+              </div>
+              <button class="text-link" data-page="notifications">View all →</button>
+            </div>
+            <div id="overviewNotifications"></div>
+          </article>
+
+        </div>
+
+      </section>
+
+      <!-- AVAILABLE PICKUPS PAGE -->
+      <section class="page" id="page-pickups">
+
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">FIND FOOD TO COLLECT</div>
+            <h1>Available pickups</h1>
+            <p>Accept an available donation and help deliver it to the receiving organisation.</p>
+          </div>
+        </div>
+
+        <div class="section-grid equal">
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Pickup opportunities</h2>
+                <p>Donations with a claimed status awaiting a volunteer.</p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="pickupFilter">Filter pickups</label>
+              <select id="pickupFilter">
+                <option value="all">All available pickups</option>
+                <option value="area">Match my service area</option>
+              </select>
+            </div>
+
+            <div class="list" id="allPickups"></div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Before accepting</h2>
+                <p>Check the donation details first.</p>
+              </div>
+            </div>
+
+            <div class="achievement">
+              <div class="achievement-icon">📍</div>
+              <div class="achievement-copy">
+                <h3>Check the location</h3>
+                <p>Review the listed pickup location and confirm that you can reach it.</p>
+              </div>
+            </div>
+
+            <div class="achievement">
+              <div class="achievement-icon">⏰</div>
+              <div class="achievement-copy">
+                <h3>Check the deadline</h3>
+                <p>Prioritise time-sensitive donations and coordinate with the donor or NGO.</p>
+              </div>
+            </div>
+
+            <div class="achievement">
+              <div class="achievement-icon">📦</div>
+              <div class="achievement-copy">
+                <h3>Record the quantity</h3>
+                <p>Enter the quantity actually collected and delivered, using the appropriate unit.</p>
+              </div>
+            </div>
+
+            <div class="achievement">
+              <div class="achievement-icon">✓</div>
+              <div class="achievement-copy">
+                <h3>Confirm completion</h3>
+                <p>Mark a delivery complete only after the food has reached the receiving organisation.</p>
+              </div>
+            </div>
+
+          </article>
+        </div>
+
+      </section>
+
+      <!-- MY DELIVERIES PAGE -->
+      <section class="page" id="page-deliveries">
+
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">COLLECTION & DELIVERY</div>
+            <h1>My deliveries</h1>
+            <p>Record quantities and move each assigned pickup through its delivery stages.</p>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="deliveryStats"></div>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2>Active delivery tasks</h2>
+              <p>Update the status of pickups assigned to you.</p>
+            </div>
+          </div>
+          <div class="list" id="allDeliveries"></div>
+        </article>
+
+      </section>
+
+      <!-- DELIVERY HISTORY PAGE -->
+      <section class="page" id="page-history">
+
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">YOUR CONTRIBUTIONS</div>
+            <h1>Delivery history</h1>
+            <p>Review your completed deliveries and the quantities you recorded.</p>
+          </div>
+        </div>
+
+        <section class="stats-grid" id="historyStats"></section>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2>Completed deliveries</h2>
+              <p>Your recorded delivery history.</p>
+            </div>
+          </div>
+          <div id="allHistory"></div>
+        </article>
+
+      </section>
+
+      <!-- IMPACT REPORT PAGE -->
+      <section class="page" id="page-impact">
+
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">YOUR DIFFERENCE</div>
+            <h1>Impact report</h1>
+            <p>Track meals rescued, quantities delivered, milestones, and your contribution history.</p>
+          </div>
+        </div>
+
+        <section class="impact-banner">
+          <div class="banner-copy">
+            <div class="banner-label">EVERY DELIVERY MATTERS</div>
+            <h2>Small actions. Meaningful community impact.</h2>
+            <p>Your recorded deliveries help keep surplus food moving towards people who need it.</p>
+          </div>
+          <div class="banner-stat">
+            <strong id="impactPoints">0</strong>
+            <span>impact points</span>
+            <small>Demo score: 10 points per completed delivery</small>
+          </div>
+        </section>
+
+        <section class="stats-grid" id="impactStats"></section>
+
+        <div class="section-grid equal">
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Achievements</h2>
+                <p>Milestones based on your recorded contributions.</p>
+              </div>
+            </div>
+            <div id="allAchievements"></div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Contribution history</h2>
+                <p>Your most recent completed deliveries.</p>
+              </div>
+              <button class="text-link" data-page="history">Full history →</button>
+            </div>
+            <div id="impactHistory"></div>
+          </article>
+        </div>
+
+      </section>
+
+      <!-- NOTIFICATIONS PAGE -->
+      <section class="page" id="page-notifications">
+
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">STAY INFORMED</div>
+            <h1>Notifications</h1>
+            <p>Pickup reminders, deadline warnings, new donations, and delivery status updates.</p>
+          </div>
+        </div>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2>Notification centre</h2>
+              <p id="notificationSummary">Your latest activity.</p>
+            </div>
+          </div>
+
+          <div class="notification-tools">
+            <button class="btn btn-outline" id="markAllRead">Mark all as read</button>
+            <button class="btn btn-outline" id="clearRead">Clear read</button>
+          </div>
+
+          <div id="allNotifications"></div>
+        </article>
+
+      </section>
+
+      <!-- PROFILE PAGE -->
+      <section class="page" id="page-profile">
+
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">YOUR ACCOUNT</div>
+            <h1>Profile & settings</h1>
+            <p>Manage your volunteer details, preferred pickup radius, and availability.</p>
+          </div>
+        </div>
+
+        <div class="section-grid equal">
+
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Volunteer profile</h2>
+                <p>Keep your contact details up to date.</p>
+              </div>
+            </div>
+
+            <div class="profile-top">
+              <div class="profile-avatar" id="profileAvatar">V</div>
+              <div>
+                <h3 id="profileDisplayName">Volunteer</h3>
+                <p id="profileDisplayEmail">Volunteer account</p>
+              </div>
+            </div>
+
+            <form id="profileForm">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="profileName">Full name</label>
+                  <input id="profileName" maxlength="100" required>
+                </div>
+
+                <div class="field">
+                  <label for="profilePhone">Phone number</label>
+                  <input id="profilePhone" type="tel" maxlength="25" required>
+                </div>
+
+                <div class="field full">
+                  <label for="profileCity">Service area / city</label>
+                  <input id="profileCity" maxlength="120" placeholder="e.g. Tirupati" required>
+                </div>
+
+                <div class="field">
+                  <label for="profileRadius">Preferred pickup radius</label>
+                  <select id="profileRadius">
+                    <option value="2">Within 2 km</option>
+                    <option value="5">Within 5 km</option>
+                    <option value="10">Within 10 km</option>
+                    <option value="20">Within 20 km</option>
+                    <option value="50">Within 50 km</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="profileHours">Available hours</label>
+                  <select id="profileHours">
+                    <option value="Flexible">Flexible</option>
+                    <option value="Morning">Morning</option>
+                    <option value="Afternoon">Afternoon</option>
+                    <option value="Evening">Evening</option>
+                    <option value="Weekends">Weekends</option>
+                  </select>
+                </div>
+
+                <div class="field full">
+                  <label for="profileAvailability">Current availability</label>
+                  <select id="profileAvailability">
+                    <option value="Available">Available for pickups</option>
+                    <option value="Busy">Busy with current work</option>
+                    <option value="Offline">Unavailable</option>
+                  </select>
+                </div>
+              </div>
+
+              <p class="field-help">
+                Your pickup radius is saved as a preference. Actual distance-based
+                matching requires donation and volunteer coordinates.
+              </p>
+
+              <div class="form-message" id="profileMessage" aria-live="polite"></div>
+              <button class="form-submit" type="submit">Save profile & settings</button>
+            </form>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div>
+                <h2>Availability overview</h2>
+                <p>Your saved volunteering preferences.</p>
+              </div>
+            </div>
+
+            <div class="preference-row">
+              <div>
+                <strong>Availability status</strong>
+                <p>Whether you're currently available to help.</p>
+              </div>
+              <span class="status available" id="settingStatus">Available</span>
+            </div>
+
+            <div class="preference-row">
+              <div>
+                <strong>Service area</strong>
+                <p>Your preferred working location.</p>
+              </div>
+              <span class="preference-value" id="settingCity">Not set</span>
+            </div>
+
+            <div class="preference-row">
+              <div>
+                <strong>Pickup radius</strong>
+                <p>Preferred maximum travel distance.</p>
+              </div>
+              <span class="preference-value" id="settingRadius">5 km</span>
+            </div>
+
+            <div class="preference-row">
+              <div>
+                <strong>Available hours</strong>
+                <p>When you prefer to volunteer.</p>
+              </div>
+              <span class="preference-value" id="settingHours">Flexible</span>
+            </div>
+
+            <div style="height:20px"></div>
+
+            <div class="card-header">
+              <div>
+                <h2>Account</h2>
+                <p>Finish your session securely on this device.</p>
+              </div>
+            </div>
+
+            <button class="btn btn-outline" id="profileLogout" style="width:100%">
+              ↗ Log out
+            </button>
+
+            <p class="field-help" style="margin-top:14px">
+              Changes in this frontend demo are saved to this browser. Use the
+              authenticated Flask backend for shared, multi-device account data.
+            </p>
+          </article>
+
+        </div>
+
+      </section>
+
+      <footer class="footer">
+        FoodBridge · Good food. Good purpose.<br>
+        Volunteer workspace
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* -----------------------------------------
+   SHARED STORAGE
+----------------------------------------- */
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+}[char]));
+
+const storage = {
+  get(key, fallback) {
+    try {
+      return JSON.parse(localStorage.getItem(key)) ?? fallback;
+    } catch {
+      return fallback;
+    }
+  },
+
+  set(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+};
+
+const getUsers = () => storage.get("fb_users", []);
+const getListings = () => storage.get("fb_listings", []);
+const saveListings = listings => storage.set("fb_listings", listings);
+
+function getSession() {
+  return sessionStorage.getItem("fb_session") ||
+         localStorage.getItem("fb_session");
+}
+
+function clearSession() {
+  sessionStorage.removeItem("fb_session");
+  localStorage.removeItem("fb_session");
+}
+
+function currentUser() {
+  return getUsers().find(item => item.email === getSession());
+}
+
+function profileKey(email) {
+  return "fb_volunteer_profile_" + email;
+}
+
+function getProfile(account) {
+  return storage.get(profileKey(account.email), {
+    radius:"5",
+    hours:"Flexible",
+    availability:"Available",
+    notifications:[],
+    seenDonationIds:[]
+  });
+}
+
+function saveProfile(account, profile) {
+  return storage.set(profileKey(account.email), profile);
+}
+
+function newId() {
+  return window.crypto?.randomUUID?.() ||
+    Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+function toast(message, error = false) {
+  const element = $("#toast");
+  element.textContent = message;
+  element.className = "toast show" + (error ? " error" : "");
+
+  clearTimeout(toast.timer);
+
+  toast.timer = setTimeout(() => {
+    element.className = "toast";
+  }, 3000);
+}
+
+function formatDate(value) {
+  if (!value) return "Not recorded";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return String(value);
+
+  return date.toLocaleString([], {
+    year:"numeric",
+    month:"short",
+    day:"numeric",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+function todayText() {
+  return new Date().toLocaleDateString([], {
+    weekday:"long",
+    day:"numeric",
+    month:"long",
+    year:"numeric"
+  });
+}
+
+/* -----------------------------------------
+   AUTHENTICATION CHECK
+----------------------------------------- */
+
+let account = currentUser();
+
+if (!account || account.role !== "Volunteer") {
+  clearSession();
+  window.location.replace("index.html");
+}
+
+/* -----------------------------------------
+   LISTING HELPERS
+----------------------------------------- */
+
+function idOf(listing) {
+  return String(listing.id ?? listing._id ?? listing.title ?? "");
+}
+
+function statusOf(listing) {
+  return listing.status || "claimed";
+}
+
+function isMine(listing) {
+  if (listing.volunteerEmail) {
+    return listing.volunteerEmail === account.email;
+  }
+
+  return Boolean(listing.volunteer) &&
+         listing.volunteer === account.name;
+}
+
+function myListings() {
+  return getListings().filter(isMine);
+}
+
+function activeListings() {
+  return myListings().filter(item =>
+    ["assigned","picked_up","in_transit"].includes(statusOf(item))
+  );
+}
+
+function completedListings() {
+  return myListings().filter(item => statusOf(item) === "delivered");
+}
+
+function availableListings() {
+  return getListings().filter(item => statusOf(item) === "claimed");
+}
+
+function qtyOf(listing) {
+  const value = listing.deliveredQuantity ??
+                listing.collectedQuantity ??
+                0;
+
+  const quantity = Number(value);
+
+  return Number.isFinite(quantity) && quantity > 0 ? quantity : 0;
+}
+
+function unitOf(listing) {
+  return listing.quantityUnit || "meals";
+}
+
+function mealsRescued() {
+  return completedListings()
+    .filter(item => unitOf(item) === "meals")
+    .reduce((sum,item) => sum + qtyOf(item), 0);
+}
+
+function totalFoodCollected() {
+  return completedListings().reduce(
+    (sum,item) => sum + qtyOf(item),0
+  );
+}
+
+function pointsEarned() {
+  return completedListings().length * 10;
+}
+
+function statusHTML(status) {
+  const safe = status || "claimed";
+
+  return `<span class="status ${esc(safe)}">${esc(safe.replaceAll("_"," "))}</span>`;
+}
+
+function deadlineOf(listing) {
+  return listing.deadline ||
+         listing.expiryDate ||
+         listing.expiresAt ||
+         "";
+}
+
+function progressHTML(status) {
+  const steps = [
+    ["assigned","Assigned"],
+    ["picked_up","Collected"],
+    ["in_transit","In transit"],
+    ["delivered","Delivered"]
+  ];
+
+  const current = steps.findIndex(step => step[0] === status);
+
+  return `
+    <div class="progress">
+      ${steps.map((step,index) => `
+        <span class="${current >= index ? "done" : ""}">${step[1]}</span>
+      `).join("")}
+    </div>
+  `;
+}
+
+/* -----------------------------------------
+   NOTIFICATIONS
+----------------------------------------- */
+
+function notify(type,title,message,reference = "") {
+  const profile = getProfile(account);
+
+  if (!Array.isArray(profile.notifications)) {
+    profile.notifications = [];
+  }
+
+  const duplicate = profile.notifications.some(item =>
+    item.type === type &&
+    item.reference === String(reference) &&
+    item.title === title
+  );
+
+  if (duplicate) return;
+
+  profile.notifications.unshift({
+    id:newId(),
+    type,
+    title,
+    message,
+    reference:String(reference),
+    createdAt:new Date().toISOString(),
+    read:false
+  });
+
+  profile.notifications = profile.notifications.slice(0,100);
+
+  saveProfile(account,profile);
+}
+
+function checkDonationNotifications() {
+  const profile = getProfile(account);
+
+  if (!Array.isArray(profile.seenDonationIds)) {
+    profile.seenDonationIds = [];
+  }
+
+  const area = String(account.city || "").trim().toLowerCase();
+
+  const donations = availableListings().filter(item => {
+    if (!area) return true;
+
+    const location = String(item.location || "").toLowerCase();
+
+    return !location || location.includes(area);
+  });
+
+  donations.forEach(item => {
+    const id = idOf(item);
+
+    if (!profile.seenDonationIds.includes(id)) {
+      notify(
+        "donation",
+        "New pickup available",
+        `${item.title || "A food donation"} is awaiting collection. Check the pickup list.`,
+        id
+      );
+
+      profile.seenDonationIds.push(id);
+    }
+  });
+
+  profile.seenDonationIds = profile.seenDonationIds.slice(-500);
+  saveProfile(account,profile);
+}
+
+function checkReminders() {
+  myListings().forEach(item => {
+    const status = statusOf(item);
+    const id = idOf(item);
+
+    if (["assigned","picked_up","in_transit"].includes(status)) {
+      notify(
+        "reminder",
+        "Delivery reminder",
+        `${item.title || "Your pickup"} is ${status.replaceAll("_"," ")}. Update the status when ready.`,
+        id
+      );
+    }
+
+    const deadline = deadlineOf(item);
+
+    if (deadline && status !== "delivered") {
+      const time = new Date(deadline).getTime();
+
+      if (Number.isFinite(time)) {
+        const remaining = time - Date.now();
+
+        if (remaining > 0 && remaining <= 24 * 60 * 60 * 1000) {
+          notify(
+            "deadline",
+            "Deadline approaching",
+            `${item.title || "This donation"} has a recorded deadline of ${formatDate(deadline)}.`,
+            id
+          );
+        } else if (remaining <= 0) {
+          notify(
+            "deadline",
+            "Check the food deadline",
+            `${item.title || "This donation"} has passed its recorded deadline. Confirm with the donor or NGO before proceeding.`,
+            id
+          );
+        }
+      }
+    }
+  });
+}
+
+function notificationIcon(type) {
+  const icons = {
+    donation:"🥗",
+    reminder:"⏰",
+    deadline:"⚠️",
+    claim:"📦",
+    progress:"🚚",
+    completion:"🎉"
+  };
+
+  return icons[type] || "🔔";
+}
+
+function notificationHTML(item, compact = false) {
+  return `
+    <div class="notification ${item.read ? "" : "unread"}">
+      <div class="notification-icon">${notificationIcon(item.type)}</div>
+      <div class="notification-copy">
+        <h3>${esc(item.title)}</h3>
+        <p>${esc(item.message)}</p>
+        <p>${esc(formatDate(item.createdAt))}</p>
+        ${compact && !item.read ? `
+          <button class="text-link" style="margin-top:7px"
+            data-read="${esc(item.id)}">Mark as read</button>
+        ` : ""}
+      </div>
+      ${!compact && !item.read ? `
+        <button class="small-btn light" data-read="${esc(item.id)}">Read</button>
+      ` : ""}
+    </div>
+  `;
+}
+
+function getNotifications() {
+  const profile = getProfile(account);
+
+  return Array.isArray(profile.notifications)
+    ? profile.notifications
+    : [];
+}
+
+function renderNotifications() {
+  const notifications = getNotifications();
+
+  const unread = notifications.filter(item => !item.read).length;
+
+  $("#unreadCount").textContent = unread;
+  $("#notificationDot").classList.toggle("hidden",unread === 0);
+
+  $("#notificationSummary").textContent =
+    `${notifications.length} notifications · ${unread} unread`;
+
+  $("#allNotifications").innerHTML = notifications.length
+    ? notifications.map(item => notificationHTML(item)).join("")
+    : `<div class="empty">You're all caught up! New pickup and delivery updates will appear here.</div>`;
+
+  const recent = notifications.slice(0,3);
+
+  $("#overviewNotifications").innerHTML = recent.length
+    ? recent.map(item => notificationHTML(item,true)).join("")
+    : `<div class="empty">No notifications yet.</div>`;
+
+  $$("[data-read]").forEach(button => {
+    button.addEventListener("click",() => {
+      const profile = getProfile(account);
+
+      profile.notifications = (profile.notifications || []).map(item =>
+        item.id === button.dataset.read
+          ? {...item,read:true}
+          : item
+      );
+
+      saveProfile(account,profile);
+      renderNotifications();
+    });
+  });
+}
+
+/* -----------------------------------------
+   ACHIEVEMENTS
+----------------------------------------- */
+
+function achievements() {
+  const completed = completedListings().length;
+  const meals = mealsRescued();
+
+  return [
+    {
+      icon:"🌱",
+      title:"First delivery",
+      description:"Complete your first delivery.",
+      progress:completed >= 1 ? 1 : 0,
+      current:Math.min(completed,1),
+      target:1
+    },
+    {
+      icon:"🚲",
+      title:"Reliable volunteer",
+      description:"Complete 5 successful deliveries.",
+      progress:Math.min(completed / 5,1),
+      current:Math.min(completed,5),
+      target:5
+    },
+    {
+      icon:"🍱",
+      title:"Meal saver",
+      description:"Record 50 meals rescued.",
+      progress:Math.min(meals / 50,1),
+      current:Math.min(meals,50),
+      target:50
+    },
+    {
+      icon:"🏆",
+      title:"Community champion",
+      description:"Complete 20 successful deliveries.",
+      progress:Math.min(completed / 20,1),
+      current:Math.min(completed,20),
+      target:20
+    }
+  ];
+}
+
+function achievementHTML(item) {
+  const unlocked = item.progress >= 1;
+
+  return `
+    <div class="achievement">
+      <div class="achievement-icon">${item.icon}</div>
+      <div class="achievement-copy">
+        <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+          <h3>${esc(item.title)}</h3>
+          <span class="status ${unlocked ? "available" : "busy"}">
+            ${unlocked ? "Unlocked" : "In progress"}
+          </span>
+        </div>
+        <p>${esc(item.description)}</p>
+        <div class="achievement-progress">
+          <span style="width:${Math.round(item.progress * 100)}%"></span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAchievements() {
+  const html = achievements().map(achievementHTML).join("");
+
+  $("#overviewAchievements").innerHTML = html;
+  $("#allAchievements").innerHTML = html;
+}
+
+/* -----------------------------------------
+   PICKUP CARD AND DELIVERY CARD
+----------------------------------------- */
+
+function pickupCard(item) {
+  const deadline = deadlineOf(item);
+
+  return `
+    <div class="item">
+      <div class="item-head">
+        <div>
+          <h3>${esc(item.title || "Food donation")}</h3>
+          <p>${esc(item.qty || "Quantity not specified")} · ${esc(item.donor || "Donor not specified")}</p>
+        </div>
+        ${statusHTML(statusOf(item))}
+      </div>
+
+      <p>📍 ${esc(item.location || "Location not specified")}</p>
+      ${item.claimedBy ? `<p>Receiving NGO: ${esc(item.claimedBy)}</p>` : ""}
+      ${deadline ? `<p>⏰ Deadline: ${esc(formatDate(deadline))}</p>` : ""}
+
+      <div class="item-actions">
+        <button class="small-btn lime" data-accept="${esc(idOf(item))}">
+          Accept pickup
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function deliveryCard(item) {
+  const status = statusOf(item);
+  const id = idOf(item);
+  const deadline = deadlineOf(item);
+
+  let actionHTML = "";
+
+  if (status === "assigned") {
+    actionHTML = `
+      <div class="quantity-row">
+        <div class="field">
+          <label for="collect-${esc(id)}">Quantity collected</label>
+          <input id="collect-${esc(id)}" type="number" min="0.01" step="any"
+            value="${qtyOf(item) || ""}" placeholder="Enter amount" required>
+        </div>
+        <div class="field">
+          <label for="collect-unit-${esc(id)}">Unit</label>
+          <select id="collect-unit-${esc(id)}">
+            ${["meals","kg","items","boxes","litres"].map(unit => `
+              <option value="${unit}" ${unitOf(item) === unit ? "selected" : ""}>${unit}</option>
+            `).join("")}
+          </select>
+        </div>
+      </div>
+      <div class="item-actions">
+        <button class="small-btn lime" data-collected="${esc(id)}">Confirm collection</button>
+      </div>
+    `;
+  } else if (status === "picked_up") {
+    actionHTML = `
+      <div class="item-actions">
+        <button class="small-btn lime" data-transit="${esc(id)}">Start delivery</button>
+      </div>
+    `;
+  } else if (status === "in_transit") {
+    actionHTML = `
+      <div class="quantity-row">
+        <div class="field">
+          <label for="deliver-${esc(id)}">Quantity delivered</label>
+          <input id="deliver-${esc(id)}" type="number" min="0.01" step="any"
+            value="${qtyOf(item) || ""}" placeholder="Enter amount" required>
+        </div>
+        <div class="field">
+          <label for="deliver-unit-${esc(id)}">Unit</label>
+          <select id="deliver-unit-${esc(id)}">
+            ${["meals","kg","items","boxes","litres"].map(unit => `
+              <option value="${unit}" ${unitOf(item) === unit ? "selected" : ""}>${unit}</option>
+            `).join("")}
+          </select>
+        </div>
+      </div>
+      <div class="item-actions">
+        <button class="small-btn lime" data-delivered="${esc(id)}">Confirm delivery</button>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="item">
+      <div class="item-head">
+        <div>
+          <h3>${esc(item.title || "Food donation")}</h3>
+          <p>${esc(item.qty || "Quantity not specified")} · ${esc(item.donor || "Donor")}</p>
+        </div>
+        ${statusHTML(status)}
+      </div>
+
+      <p>📍 ${esc(item.location || "Location not specified")}</p>
+      ${item.claimedBy ? `<p>Receiving NGO: ${esc(item.claimedBy)}</p>` : ""}
+      ${deadline ? `<p>⏰ Deadline: ${esc(formatDate(deadline))}</p>` : ""}
+      ${qtyOf(item) ? `<p>Recorded quantity: <strong>${esc(qtyOf(item))} ${esc(unitOf(item))}</strong></p>` : ""}
+
+      ${progressHTML(status)}
+      ${actionHTML}
+    </div>
+  `;
+}
+
+/* -----------------------------------------
+   ACCEPT AND UPDATE DELIVERIES
+----------------------------------------- */
+
+function acceptPickup(id) {
+  const listings = getListings();
+  const item = listings.find(listing => idOf(listing) === String(id));
+
+  if (!item || statusOf(item) !== "claimed") {
+    toast("This pickup is no longer available.",true);
+    renderAll();
+    return;
+  }
+
+  item.status = "assigned";
+  item.volunteer = account.name;
+  item.volunteerEmail = account.email;
+  item.assignedAt = new Date().toISOString();
+
+  if (!saveListings(listings)) {
+    toast("Could not save pickup changes.",true);
+    return;
+  }
+
+  notify(
+    "claim",
+    "Pickup accepted",
+    `You accepted ${item.title || "a food donation"}. Record the quantity when you collect it.`,
+    id
+  );
+
+  toast("Pickup accepted successfully.");
+  renderAll();
+}
+
+function updateMine(id, expectedStatus, updater) {
+  const listings = getListings();
+
+  const item = listings.find(listing =>
+    idOf(listing) === String(id) && isMine(listing)
+  );
+
+  if (!item) {
+    toast("Delivery not found. Refresh and try again.",true);
+    return false;
+  }
+
+  if (statusOf(item) !== expectedStatus) {
+    toast("This delivery status has changed. Refresh and try again.",true);
+    renderAll();
+    return false;
+  }
+
+  updater(item);
+
+  if (!saveListings(listings)) {
+    toast("Could not save the delivery update.",true);
+    return false;
+  }
+
+  return true;
+}
+
+function confirmCollection(id) {
+  const quantityInput = $("#collect-" + CSS.escape(id));
+  const unitInput = $("#collect-unit-" + CSS.escape(id));
+  const quantity = Number(quantityInput?.value);
+
+  if (!Number.isFinite(quantity) || quantity <= 0 || !unitInput) {
+    toast("Enter a valid collection quantity.",true);
+    return;
+  }
+
+  const success = updateMine(id,"assigned",item => {
+    item.collectedQuantity = quantity;
+    item.quantityUnit = unitInput.value;
+    item.status = "picked_up";
+    item.pickedUpAt = new Date().toISOString();
+  });
+
+  if (!success) return;
+
+  notify(
+    "progress",
+    "Collection confirmed",
+    `You recorded ${quantity} ${unitInput.value} collected.`,
+    id
+  );
+
+  toast("Collection recorded.");
+  renderAll();
+}
+
+function startDelivery(id) {
+  const success = updateMine(id,"picked_up",item => {
+    item.status = "in_transit";
+    item.deliveryStartedAt = new Date().toISOString();
+  });
+
+  if (!success) return;
+
+  notify(
+    "progress",
+    "Delivery in progress",
+    "Your delivery is in transit. Confirm the delivered quantity when complete.",
+    id
+  );
+
+  toast("Delivery marked in transit.");
+  renderAll();
+}
+
+function confirmDelivery(id) {
+  const quantityInput = $("#deliver-" + CSS.escape(id));
+  const unitInput = $("#deliver-unit-" + CSS.escape(id));
+  const quantity = Number(quantityInput?.value);
+
+  if (!Number.isFinite(quantity) || quantity <= 0 || !unitInput) {
+    toast("Enter a valid delivered quantity.",true);
+    return;
+  }
+
+  const success = updateMine(id,"in_transit",item => {
+    item.deliveredQuantity = quantity;
+    item.quantityUnit = unitInput.value;
+    item.status = "delivered";
+    item.deliveredAt = new Date().toISOString();
+  });
+
+  if (!success) return;
+
+  notify(
+    "completion",
+    "Delivery completed",
+    `Delivery confirmed: ${quantity} ${unitInput.value}. Thank you for helping your community.`,
+    id
+  );
+
+  toast("Delivery completed successfully!");
+  renderAll();
+}
+
+/* -----------------------------------------
+   STATS AND HISTORY
+----------------------------------------- */
+
+function statCard(icon,label,value,pill,description) {
+  return `
+    <article class="stat-card">
+      <div class="stat-top">
+        <span class="stat-icon">${icon}</span>
+        <span class="stat-pill">${esc(pill)}</span>
+      </div>
+      <strong>${esc(value)}</strong>
+      <p>${esc(label)}</p>
+      <small>${esc(description)}</small>
+    </article>
+  `;
+}
+
+function statsHTML() {
+  const completed = completedListings();
+  const active = activeListings();
+  const meals = mealsRescued();
+  const total = totalFoodCollected();
+
+  return [
+    statCard("📦","Assigned deliveries",active.length,"In progress","Pickups you're responsible for"),
+    statCard("⏳","Awaiting collection",active.filter(x => statusOf(x) === "assigned").length,"Next step","Record quantity after pickup"),
+    statCard("✅","Successful deliveries",completed.length,"Completed","Deliveries marked as delivered"),
+    statCard("⚖️","Food collected",total,"Recorded",`Meals rescued: ${meals}`)
+  ].join("");
+}
+
+function historyHTML(item) {
+  return `
+    <div class="history-row">
+      <div>
+        <h3>${esc(item.title || "Food donation")}</h3>
+        <p>${esc(item.donor || "Donor")} · ${esc(item.location || "Location not recorded")}</p>
+        <p>Completed: ${esc(formatDate(item.deliveredAt))}</p>
+        ${statusHTML("delivered")}
+      </div>
+      <div class="history-quantity">
+        ${esc(qtyOf(item))}
+        <div style="font-size:9px;color:var(--muted);font-weight:500;margin-top:5px">
+          ${esc(unitOf(item))}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderHistory() {
+  const completed = completedListings().slice().sort(
+    (a,b) => new Date(b.deliveredAt || 0) - new Date(a.deliveredAt || 0)
+  );
+
+  $("#historyStats").innerHTML = statsHTML();
+
+  $("#allHistory").innerHTML = completed.length
+    ? completed.map(historyHTML).join("")
+    : `<div class="empty">No completed deliveries yet. Your delivery history will appear here after you confirm your first delivery.</div>`;
+
+  $("#impactHistory").innerHTML = completed.length
+    ? completed.slice(0,4).map(historyHTML).join("")
+    : `<div class="empty">Your contribution history will appear here.</div>`;
+}
+
+/* -----------------------------------------
+   PROFILE SETTINGS
+----------------------------------------- */
+
+function initials(name) {
+  return String(name || "Volunteer")
+    .trim()
+    .split(/\s+/)
+    .slice(0,2)
+    .map(part => part[0] || "")
+    .join("")
+    .toUpperCase();
+}
+
+function renderProfile() {
+  account = currentUser();
+
+  if (!account) return;
+
+  const profile = getProfile(account);
+
+  $("#profileName").value = account.name || "";
+  $("#profilePhone").value = account.phone || "";
+  $("#profileCity").value = account.city || "";
+  $("#profileRadius").value = String(profile.radius || "5");
+  $("#profileHours").value = profile.hours || "Flexible";
+  $("#profileAvailability").value = profile.availability || "Available";
+
+  $("#profileDisplayName").textContent = account.name || "Volunteer";
+  $("#profileDisplayEmail").textContent = account.email || "Volunteer account";
+  $("#profileAvatar").textContent = initials(account.name);
+  $("#avatarButton").textContent = initials(account.name);
+
+  $("#settingStatus").textContent = profile.availability || "Available";
+  $("#settingStatus").className =
+    "status " + (
+      profile.availability === "Available"
+        ? "available"
+        : profile.availability === "Busy"
+          ? "busy"
+          : "claimed"
+    );
+
+  $("#settingCity").textContent = account.city || "Not set";
+  $("#settingRadius").textContent = (profile.radius || "5") + " km";
+  $("#settingHours").textContent = profile.hours || "Flexible";
+}
+
+/* -----------------------------------------
+   NAVIGATION AND SEARCH
+----------------------------------------- */
+
+const pageTitles = {
+  overview:"Dashboard overview",
+  pickups:"Available pickups",
+  deliveries:"My deliveries",
+  history:"Delivery history",
+  impact:"Impact report",
+  notifications:"Notifications",
+  profile:"Profile & settings"
+};
+
+function showPage(name) {
+  if (!pageTitles[name]) name = "overview";
+
+  $$(".page").forEach(page => {
+    page.classList.toggle("active",page.id === "page-" + name);
+  });
+
+  $$(".nav-btn[data-page]").forEach(button => {
+    button.classList.toggle("active",button.dataset.page === name);
+  });
+
+  $("#breadcrumbText").textContent = pageTitles[name];
+  $("#sidebar").classList.remove("open");
+
+  if (name === "notifications") {
+    renderNotifications();
+  }
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.addEventListener("click",event => {
+  const button = event.target.closest("[data-page]");
+
+  if (!button) return;
+
+  event.preventDefault();
+  showPage(button.dataset.page);
+});
+
+$("#notificationShortcut").addEventListener("click",() => {
+  showPage("notifications");
+});
+
+$("#menuToggle").addEventListener("click",() => {
+  $("#sidebar").classList.toggle("open");
+});
+
+/* -----------------------------------------
+   SEARCH AND PICKUP FILTER
+----------------------------------------- */
+
+function renderPickups() {
+  let items = availableListings();
+
+  if ($("#pickupFilter").value === "area") {
+    const area = String(account.city || "").trim().toLowerCase();
+
+    if (area) {
+      items = items.filter(item =>
+        String(item.location || "").toLowerCase().includes(area)
+      );
+    }
+  }
+
+  const query = $("#globalSearch").value.trim().toLowerCase();
+
+  if (query) {
+    items = items.filter(item =>
+      [
+        item.title,
+        item.location,
+        item.donor,
+        item.claimedBy
+      ].some(value => String(value || "").toLowerCase().includes(query))
+    );
+  }
+
+  $("#allPickups").innerHTML = items.length
+    ? items.map(pickupCard).join("")
+    : `<div class="empty">No matching pickups are currently available.</div>`;
+
+  $$("[data-accept]").forEach(button => {
+    button.addEventListener("click",() => acceptPickup(button.dataset.accept));
+  });
+}
+
+function renderDeliveries() {
+  const active = activeListings();
+
+  $("#deliveryStats").innerHTML = [
+    statCard("📦","Active deliveries",active.length,"Assigned","Your current tasks"),
+    statCard("🧺","Awaiting collection",active.filter(x => statusOf(x) === "assigned").length,"Collection","Record the collected quantity"),
+    statCard("🚚","In transit",active.filter(x => statusOf(x) === "in_transit").length,"Delivery","Deliver the food to its destination"),
+    statCard("✓","Completed",completedListings().length,"Success","Your completed deliveries")
+  ].join("");
+
+  $("#allDeliveries").innerHTML = active.length
+    ? active.map(deliveryCard).join("")
+    : `<div class="empty">You have no active deliveries. Visit Available pickups to accept a task.</div>`;
+
+  $$("[data-collected]").forEach(button => {
+    button.addEventListener("click",() => confirmCollection(button.dataset.collected));
+  });
+
+  $$("[data-transit]").forEach(button => {
+    button.addEventListener("click",() => startDelivery(button.dataset.transit));
+  });
+
+  $$("[data-delivered]").forEach(button => {
+    button.addEventListener("click",() => confirmDelivery(button.dataset.delivered));
+  });
+}
+
+/* -----------------------------------------
+   OVERVIEW AND IMPACT RENDERING
+----------------------------------------- */
+
+function renderOverview() {
+  const completed = completedListings();
+  const active = activeListings();
+  const available = availableListings();
+  const meals = mealsRescued();
+  const food = totalFoodCollected();
+
+  $("#overviewStats").innerHTML = [
+    statCard("📦","My active deliveries",active.length,"In progress","Pickups assigned to you"),
+    statCard("⏳","Available pickups",available.length,"Open","Donations awaiting collection"),
+    statCard("✅","Successful deliveries",completed.length,"Completed","Food delivered successfully"),
+    statCard("⚖️","Food collected",food,"Rescued",`Recorded meals: ${meals}`)
+  ].join("");
+
+  $("#bannerMeals").textContent = meals;
+  $("#bannerKg").textContent = `${food} recorded quantity units collected`;
+
+  $("#overviewPickups").innerHTML = available.length
+    ? available.slice(0,3).map(pickupCard).join("")
+    : `<div class="empty">No pickups are currently waiting.</div>`;
+
+  $("#overviewDeliveries").innerHTML = active.length
+    ? active.slice(0,3).map(item => `
+      <div class="item">
+        <div class="item-head">
+          <h3>${esc(item.title || "Food donation")}</h3>
+          ${statusHTML(statusOf(item))}
+        </div>
+        <p>📍 ${esc(item.location || "Location not specified")}</p>
+        ${progressHTML(statusOf(item))}
+        <div class="item-actions">
+          <button class="small-btn light" data-page="deliveries">Manage deliveries</button>
+        </div>
+      </div>
+    `).join("")
+    : `<div class="empty">No active deliveries yet.</div>`;
+
+  $$("[data-accept]").forEach(button => {
+    button.addEventListener("click",() => acceptPickup(button.dataset.accept));
+  });
+}
+
+function renderImpact() {
+  const completed = completedListings();
+
+  $("#impactPoints").textContent = pointsEarned();
+
+  $("#impactStats").innerHTML = [
+    statCard("🍱","Meals rescued",mealsRescued(),"Meals","Completed deliveries recorded in meals"),
+    statCard("⚖️","Total food quantity",totalFoodCollected(),"Recorded","Check history for individual units"),
+    statCard("🚚","Successful deliveries",completed.length,"Completed","Completed volunteer deliveries"),
+    statCard("⭐","Impact points",pointsEarned(),"Demo points","10 points for each completed delivery")
+  ].join("");
+
+  renderAchievements();
+}
+
+/* -----------------------------------------
+   PROFILE SAVE
+----------------------------------------- */
+
+$("#profileForm").addEventListener("submit",event => {
+  event.preventDefault();
+
+  account = currentUser();
+
+  if (!account || account.role !== "Volunteer") {
+    toast("Please log in again.",true);
+    return;
+  }
+
+  const name = $("#profileName").value.trim();
+  const phone = $("#profilePhone").value.trim();
+  const city = $("#profileCity").value.trim();
+
+  if (!name || !phone || !city) {
+    $("#profileMessage").textContent =
+      "Please fill in your name, phone number, and service area.";
+    return;
+  }
+
+  const users = getUsers();
+  const index = users.findIndex(item => item.email === account.email);
+
+  if (index < 0) {
+    $("#profileMessage").textContent =
+      "Could not find your account. Please log in again.";
+    return;
+  }
+
+  users[index].name = name;
+  users[index].phone = phone;
+  users[index].city = city;
+
+  if (!storage.set("fb_users",users)) {
+    $("#profileMessage").textContent =
+      "Could not save your profile in browser storage.";
+    return;
+  }
+
+  account = users[index];
+
+  const profile = getProfile(account);
+  profile.radius = $("#profileRadius").value;
+  profile.hours = $("#profileHours").value;
+  profile.availability = $("#profileAvailability").value;
+
+  if (!saveProfile(account,profile)) {
+    $("#profileMessage").textContent =
+      "Could not save your preferences.";
+    return;
+  }
+
+  $("#profileMessage").textContent = "";
+  toast("Profile and preferences saved.");
+  renderAll();
+  showPage("profile");
+});
+
+/* -----------------------------------------
+   NOTIFICATION CONTROLS
+----------------------------------------- */
+
+$("#markAllRead").addEventListener("click",() => {
+  const profile = getProfile(account);
+
+  profile.notifications = (profile.notifications || []).map(item => ({
+    ...item,
+    read:true
+  }));
+
+  saveProfile(account,profile);
+  renderNotifications();
+  toast("All notifications marked as read.");
+});
+
+$("#clearRead").addEventListener("click",() => {
+  const profile = getProfile(account);
+
+  profile.notifications = (profile.notifications || []).filter(
+    item => !item.read
+  );
+
+  saveProfile(account,profile);
+  renderNotifications();
+  toast("Read notifications cleared.");
+});
+
+$("#pickupFilter").addEventListener("change",renderPickups);
+
+$("#globalSearch").addEventListener("input",() => {
+  renderPickups();
+  showPage("pickups");
+});
+
+/* -----------------------------------------
+   LOGOUT
+----------------------------------------- */
+
+function logout() {
+  clearSession();
+  window.location.replace("index.html");
+}
+
+$("#sidebarLogout").addEventListener("click",logout);
+$("#profileLogout").addEventListener("click",logout);
+
+/* -----------------------------------------
+   REFRESH ALL DASHBOARD SECTIONS
+----------------------------------------- */
+
+function renderAll() {
+  account = currentUser();
+
+  if (!account || account.role !== "Volunteer") {
+    clearSession();
+    window.location.replace("index.html");
+    return;
+  }
+
+  $("#todayDate").textContent = todayText();
+
+  $("#welcomeHeading").textContent =
+    "Good day, " + (account.name || "Volunteer").split(" ")[0];
+
+  const profile = getProfile(account);
+
+  const status = profile.availability || "Available";
+
+  $("#availabilityStatusText")?.replaceChildren();
+
+  renderProfile();
+  renderOverview();
+  renderPickups();
+  renderDeliveries();
+  renderHistory();
+  renderImpact();
+  renderNotifications();
+
+  $("#availableCount").textContent = availableListings().length;
+  $("#activeCount").textContent = activeListings().length;
+}
+
+if (account && account.role === "Volunteer") {
+  checkDonationNotifications();
+  checkReminders();
+  renderAll();
+}
+
+/* Update this tab when other pages change shared browser storage. */
+window.addEventListener("storage",event => {
+  if (["fb_listings","fb_users"].includes(event.key)) {
+    account = currentUser();
+
+    if (account && account.role === "Volunteer") {
+      checkDonationNotifications();
+      checkReminders();
+      renderAll();
+    }
+  }
+});
+</script>
+
+</body>
+</html>
